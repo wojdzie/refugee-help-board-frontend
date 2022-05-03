@@ -3,23 +3,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/schemas/user/user_schema.dart';
+import 'package:refugee_help_board_frontend/services/login_service.dart';
 import 'package:refugee_help_board_frontend/services/register_service.dart';
 import 'package:refugee_help_board_frontend/stores/user_store.dart';
 
-part "register_view.g.dart";
+part "login_view.g.dart";
 
 @hcwidget
-Widget registerView(BuildContext ctx, WidgetRef ref) {
+Widget loginView(BuildContext ctx, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
   final loginController = useTextEditingController();
   final passwordController = useTextEditingController();
-  final emailController = useTextEditingController();
 
   final isLoading = useState(false);
 
   return Scaffold(
-      appBar: AppBar(title: const Text("Register")),
+      appBar: AppBar(title: const Text("Login")),
       body: Center(
           child: Form(
               key: key,
@@ -53,12 +53,6 @@ Widget registerView(BuildContext ctx, WidgetRef ref) {
                         return null;
                       },
                     ),
-                    TextFormField(
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email (optional)',
-                      ),
-                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: ElevatedButton(
@@ -75,11 +69,9 @@ Widget registerView(BuildContext ctx, WidgetRef ref) {
 
                                   final user = User(
                                       login: loginController.text,
-                                      password: passwordController.text,
-                                      email: emailController.text);
+                                      password: passwordController.text);
 
-                                  final result =
-                                      await RegisterService.register(user);
+                                  final result = await LoginService.login(user);
 
                                   ScaffoldMessenger.of(ctx)
                                       .hideCurrentSnackBar();

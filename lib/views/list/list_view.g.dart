@@ -1,15 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'register_view.dart';
+part of 'list_view.dart';
 
 // **************************************************************************
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class RegisterView extends HookConsumerWidget {
-  const RegisterView({Key? key}) : super(key: key);
+class AppView extends ConsumerWidget {
+  const AppView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _context, WidgetRef _ref) =>
-      registerView(_context, _ref);
+  Widget build(BuildContext _context, WidgetRef _ref) => appView(_ref);
 }

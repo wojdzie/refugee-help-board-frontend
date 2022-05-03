@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/views/landing/landing_view.dart';
+import 'package:refugee_help_board_frontend/views/list/list_view.dart';
+import 'package:refugee_help_board_frontend/views/login/login_view.dart';
 import 'package:refugee_help_board_frontend/views/register/register_view.dart';
 part 'main.g.dart';
 
@@ -20,6 +22,6 @@ Widget myApp() => MaterialApp(
         routes: {
           "/": (context) => const LandingView(),
           "/register": (context) => const RegisterView(),
-          "/login": (context) => throw Exception("TODO"),
-          "/app": (context) => throw Exception("TODO"),
+          "/login": (context) => const LoginView(),
+          "/app": (context) => const AppView(),
         });

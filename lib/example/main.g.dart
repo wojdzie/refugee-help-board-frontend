@@ -12,3 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext _context) => myApp();
 }
+
+class MyHomePage extends ConsumerWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext _context, WidgetRef _ref) =>
+      myHomePage(_context, _ref, title: title);
+}

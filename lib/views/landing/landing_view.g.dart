@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'main.dart';
+part of 'landing_view.dart';
 
 // **************************************************************************
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class LandingView extends StatelessWidget {
+  const LandingView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _context) => myApp();
+  Widget build(BuildContext _context) => landingView(_context);
 }

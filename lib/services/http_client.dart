@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart';
-import 'package:refugee_help_board_frontend/services/user_service.dart';
+import 'package:refugee_help_board_frontend/stores/user_store.dart';
 
 class _HttpClient extends BaseClient {
   _HttpClient(this.headers);

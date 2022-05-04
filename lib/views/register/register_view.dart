@@ -78,8 +78,8 @@ Widget registerView(BuildContext ctx, WidgetRef ref) {
                                       email: emailController.text);
 
                                   final result = await ref
-                                      .read(userProvider.notifier)
-                                      .login(user);
+                                      .read(userApiProvider.notifier)
+                                      .register(user);
 
                                   ScaffoldMessenger.of(ctx)
                                       .hideCurrentSnackBar();

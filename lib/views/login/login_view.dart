@@ -70,7 +70,7 @@ Widget loginView(BuildContext ctx, WidgetRef ref) {
                                       password: passwordController.text);
 
                                   final result = await ref
-                                      .read(userProvider.notifier)
+                                      .read(userApiProvider.notifier)
                                       .login(user);
 
                                   ScaffoldMessenger.of(ctx)

@@ -4,30 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/constants/backend.dart';
 import 'package:refugee_help_board_frontend/schemas/user/user_schema.dart';
 import 'package:refugee_help_board_frontend/services/http_client.dart';
+import 'package:refugee_help_board_frontend/stores/user_store.dart';
 
-enum LoginFailures {
-  wrongPassword("Wrong password"),
-  systemError("System error");
+enum LoginFailures { wrongPassword, systemError }
 
-  final String errorMessage;
-  const LoginFailures(this.errorMessage);
+enum RegisterFailures { userAlreadyExists, systemError }
 
-  @override
-  String toString() => errorMessage;
-}
-
-enum RegisterFailures {
-  userAlreadyExists("User already exists"),
-  systemError("System error");
-
-  final String errorMessage;
-  const RegisterFailures(this.errorMessage);
-
-  @override
-  String toString() => errorMessage;
-}
-
-class _UserService extends StateNotifier<User?> {
+class _UserService extends StateNotifier<void> {
   _UserService(this.ref) : super(null);
 
   final Ref ref;
@@ -39,7 +22,7 @@ class _UserService extends StateNotifier<User?> {
           body: jsonEncode(user.toJson()));
 
       if (response.statusCode == 200) {
-        state = user;
+        ref.read(userProvider.notifier).update((state) => user);
 
         return HttpResult.success(null);
       } else {
@@ -57,7 +40,9 @@ class _UserService extends StateNotifier<User?> {
           body: jsonEncode(user.toJson()));
 
       if (response.statusCode == 200) {
-        state = User.fromJson(jsonDecode(response.body));
+        ref
+            .read(userProvider.notifier)
+            .update((state) => User.fromJson(jsonDecode(response.body)));
 
         return HttpResult.success(null);
       } else {
@@ -69,5 +54,4 @@ class _UserService extends StateNotifier<User?> {
   }
 }
 
-final userProvider =
-    StateNotifierProvider<_UserService, User?>((ref) => _UserService(ref));
+final userApiProvider = StateNotifierProvider((ref) => _UserService(ref));

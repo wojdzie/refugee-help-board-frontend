@@ -21,10 +21,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
 class _$UserTearOff {
   const _$UserTearOff();
 
-  _User call(
-      {required String login,
-      required String password,
-      required String email}) {
+  _User call({required String login, required String password, String? email}) {
     return _User(
       login: login,
       password: password,
@@ -44,7 +41,7 @@ const $User = _$UserTearOff();
 mixin _$User {
   String get login => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,7 +52,7 @@ mixin _$User {
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res>;
-  $Res call({String login, String password, String email});
+  $Res call({String login, String password, String? email});
 }
 
 /// @nodoc
@@ -84,7 +81,7 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -94,7 +91,7 @@ abstract class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) then) =
       __$UserCopyWithImpl<$Res>;
   @override
-  $Res call({String login, String password, String email});
+  $Res call({String login, String password, String? email});
 }
 
 /// @nodoc
@@ -124,7 +121,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
       email: email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -132,8 +129,7 @@ class __$UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_User with DiagnosticableTreeMixin implements _User {
-  const _$_User(
-      {required this.login, required this.password, required this.email});
+  const _$_User({required this.login, required this.password, this.email});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -142,7 +138,7 @@ class _$_User with DiagnosticableTreeMixin implements _User {
   @override
   final String password;
   @override
-  final String email;
+  final String? email;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -191,7 +187,7 @@ abstract class _User implements User {
   const factory _User(
       {required String login,
       required String password,
-      required String email}) = _$_User;
+      String? email}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -200,7 +196,7 @@ abstract class _User implements User {
   @override
   String get password;
   @override
-  String get email;
+  String? get email;
   @override
   @JsonKey(ignore: true)
   _$UserCopyWith<_User> get copyWith => throw _privateConstructorUsedError;

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:refugee_help_board_frontend/services/user_service.dart';
 import 'package:refugee_help_board_frontend/views/landing/landing_view.dart';
+import 'package:refugee_help_board_frontend/views/list/list_view.dart';
+import 'package:refugee_help_board_frontend/views/login/login_view.dart';
 import 'package:refugee_help_board_frontend/views/register/register_view.dart';
 part 'main.g.dart';
 
@@ -13,13 +17,23 @@ void main() {
       .then((_) => runApp(const ProviderScope(child: MyApp())));
 }
 
-@swidget
-Widget myApp() => MaterialApp(
-        title: "Refugee App",
-        theme: ThemeData(primarySwatch: Colors.blue),
-        routes: {
-          "/": (context) => const LandingView(),
-          "/register": (context) => const RegisterView(),
-          "/login": (context) => throw Exception("TODO"),
-          "/app": (context) => throw Exception("TODO"),
-        });
+@hcwidget
+Widget myApp(BuildContext ctx, WidgetRef ref) {
+  final user = ref.read(userProvider);
+
+  useEffect(() {
+    if (user != null) {
+      Navigator.of(ctx).pushReplacementNamed("/app");
+    }
+  }, [user]);
+
+  return MaterialApp(
+      title: "Refugee App",
+      theme: ThemeData(primarySwatch: Colors.blue),
+      routes: {
+        "/": (context) => const LandingView(),
+        "/register": (context) => const RegisterView(),
+        "/login": (context) => const LoginView(),
+        "/app": (context) => const AppView(),
+      });
+}

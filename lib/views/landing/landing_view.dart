@@ -28,7 +28,7 @@ Widget landingView(BuildContext ctx) => Scaffold(
                 ),
                 ElevatedButton(
                   child: const Text("Login"),
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(ctx, "/login"),
                 ),
               ],
             ))

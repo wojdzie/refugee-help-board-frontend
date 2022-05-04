@@ -9,7 +9,7 @@ part of 'user_schema.dart';
 _$_User _$$_UserFromJson(Map<String, dynamic> json) => _$_User(
       login: json['login'] as String,
       password: json['password'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String?,
     );
 
 Map<String, dynamic> _$$_UserToJson(_$_User instance) => <String, dynamic>{

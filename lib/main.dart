@@ -19,12 +19,13 @@ void main() {
 
 @hcwidget
 Widget myApp(BuildContext ctx, WidgetRef ref) {
-  final user = ref.read(userProvider);
+  final user = ref.read(userApiProvider);
 
   useEffect(() {
     if (user != null) {
       Navigator.of(ctx).pushReplacementNamed("/app");
     }
+    return null;
   }, [user]);
 
   return MaterialApp(

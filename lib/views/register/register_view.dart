@@ -86,7 +86,10 @@ Widget registerView(BuildContext ctx, WidgetRef ref) {
 
                                   isLoading.value = false;
 
-                                  if (!result.isSuccess) {
+                                  if (result.isSuccess) {
+                                    Navigator.of(ctx).pushNamedAndRemoveUntil(
+                                        "/app", (_) => false);
+                                  } else {
                                     ScaffoldMessenger.of(ctx).showSnackBar(
                                       SnackBar(
                                           content:

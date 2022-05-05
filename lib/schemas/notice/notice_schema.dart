@@ -7,7 +7,7 @@ part "notice_schema.g.dart";
 @freezed
 class Notice with _$Notice {
   const factory Notice({
-    required String author,
+    String? author,
     required String type,
     required String description,
   }) = _Notice;

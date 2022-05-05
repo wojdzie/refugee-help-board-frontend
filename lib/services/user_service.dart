@@ -17,12 +17,11 @@ class _UserService extends StateNotifier<void> {
 
   Future<HttpResult<void, RegisterFailures>> register(User user) async {
     try {
-      //   final response = await ref.read(httpClient).post(
-      //   serverAddress("/user/register"),
-      //   body: jsonEncode(user.toJson()));
+      final response = await ref.read(httpClient).post(
+          serverAddress("/user/register"),
+          body: jsonEncode(user.toJson()));
 
-      //   if (response.statusCode == 200) {
-      if (true) {
+      if (response.statusCode == 200) {
         ref.read(userProvider.notifier).update((state) => user);
 
         return HttpResult.success(null);

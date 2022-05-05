@@ -1,2 +1,2 @@
-const noticeHelperType = "offer";
-const noticeSeekingHelpType = "request";
+const offerType = "offer";
+const requestType = "request";

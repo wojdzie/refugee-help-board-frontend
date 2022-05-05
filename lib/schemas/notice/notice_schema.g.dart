@@ -7,7 +7,7 @@ part of 'notice_schema.dart';
 // **************************************************************************
 
 _$_Notice _$$_NoticeFromJson(Map<String, dynamic> json) => _$_Notice(
-      author: json['author'] as String,
+      author: json['author'] as String?,
       type: json['type'] as String,
       description: json['description'] as String,
     );

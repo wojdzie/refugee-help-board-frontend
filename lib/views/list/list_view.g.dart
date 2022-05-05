@@ -10,7 +10,8 @@ class AppView extends HookConsumerWidget {
   const AppView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _context, WidgetRef _ref) => appView(_ref);
+  Widget build(BuildContext _context, WidgetRef _ref) =>
+      appView(_context, _ref);
 }
 
 class ListItem extends StatelessWidget {

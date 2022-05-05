@@ -22,9 +22,7 @@ class _$NoticeTearOff {
   const _$NoticeTearOff();
 
   _Notice call(
-      {required String author,
-      required String type,
-      required String description}) {
+      {String? author, required String type, required String description}) {
     return _Notice(
       author: author,
       type: type,
@@ -42,7 +40,7 @@ const $Notice = _$NoticeTearOff();
 
 /// @nodoc
 mixin _$Notice {
-  String get author => throw _privateConstructorUsedError;
+  String? get author => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
 
@@ -55,7 +53,7 @@ mixin _$Notice {
 abstract class $NoticeCopyWith<$Res> {
   factory $NoticeCopyWith(Notice value, $Res Function(Notice) then) =
       _$NoticeCopyWithImpl<$Res>;
-  $Res call({String author, String type, String description});
+  $Res call({String? author, String type, String description});
 }
 
 /// @nodoc
@@ -76,7 +74,7 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
       author: author == freezed
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -94,7 +92,7 @@ abstract class _$NoticeCopyWith<$Res> implements $NoticeCopyWith<$Res> {
   factory _$NoticeCopyWith(_Notice value, $Res Function(_Notice) then) =
       __$NoticeCopyWithImpl<$Res>;
   @override
-  $Res call({String author, String type, String description});
+  $Res call({String? author, String type, String description});
 }
 
 /// @nodoc
@@ -116,7 +114,7 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
       author: author == freezed
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -132,14 +130,13 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Notice with DiagnosticableTreeMixin implements _Notice {
-  const _$_Notice(
-      {required this.author, required this.type, required this.description});
+  const _$_Notice({this.author, required this.type, required this.description});
 
   factory _$_Notice.fromJson(Map<String, dynamic> json) =>
       _$$_NoticeFromJson(json);
 
   @override
-  final String author;
+  final String? author;
   @override
   final String type;
   @override
@@ -191,14 +188,14 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
 
 abstract class _Notice implements Notice {
   const factory _Notice(
-      {required String author,
+      {String? author,
       required String type,
       required String description}) = _$_Notice;
 
   factory _Notice.fromJson(Map<String, dynamic> json) = _$_Notice.fromJson;
 
   @override
-  String get author;
+  String? get author;
   @override
   String get type;
   @override

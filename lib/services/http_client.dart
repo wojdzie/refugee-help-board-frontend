@@ -36,13 +36,13 @@ class HttpResult<T, E> {
 final httpClient = Provider((ref) {
   final user = ref.watch(userProvider);
 
-  final headers = <String, String>{};
+  final headers = {'Content-Type': "application/json; charset=UTF-8"};
 
   if (user != null) {
     final u8 = utf8.encode("${user.login}:${user.password}");
     final base64 = base64Encode(u8);
 
-    headers["authentication"] = "Basic $base64";
+    headers["authorization"] = "Basic $base64";
   }
 
   final client = _HttpClient(headers);

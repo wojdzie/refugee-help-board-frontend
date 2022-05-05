@@ -6,9 +6,9 @@ part of 'main.dart';
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class MyApp extends HookConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _context, WidgetRef _ref) => myApp(_context, _ref);
+  Widget build(BuildContext _context) => myApp(_context);
 }

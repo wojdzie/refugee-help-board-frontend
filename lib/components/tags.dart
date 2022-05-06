@@ -53,13 +53,15 @@ Widget choiceRequestTag(
     );
 
 @swidget
-Widget lawTag() => const Chip(
+Widget lawTag() => Container(
+    margin: const EdgeInsets.only(right: 8),
+    child: const Chip(
       avatar: Icon(
         Icons.gavel,
         size: 16,
       ),
       label: Text(labels.lawLabel),
-    );
+    ));
 
 @swidget
 Widget filterLawTag(
@@ -71,13 +73,15 @@ Widget filterLawTag(
     );
 
 @swidget
-Widget foodTag({required String label}) => const Chip(
+Widget foodTag() => Container(
+    margin: const EdgeInsets.only(right: 8),
+    child: const Chip(
       avatar: Icon(
         Icons.restaurant,
         size: 16,
       ),
       label: Text(labels.foodLabel),
-    );
+    ));
 
 @swidget
 Widget filterFoodTag(
@@ -89,13 +93,15 @@ Widget filterFoodTag(
     );
 
 @swidget
-Widget accomodationTag() => const Chip(
+Widget accomodationTag() => Container(
+    margin: const EdgeInsets.only(right: 8),
+    child: const Chip(
       avatar: Icon(
         Icons.home,
         size: 16,
       ),
       label: Text(labels.accomodationLabel),
-    );
+    ));
 
 @swidget
 Widget filterAccomodationTag(

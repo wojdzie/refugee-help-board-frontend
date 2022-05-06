@@ -12,12 +12,3 @@ class NoticesListView extends HookConsumerWidget {
   @override
   Widget build(BuildContext _context, WidgetRef _ref) => noticesListView(_ref);
 }
-
-class ListItem extends StatelessWidget {
-  const ListItem({Key? key, required this.notice}) : super(key: key);
-
-  final Notice notice;
-
-  @override
-  Widget build(BuildContext _context) => listItem(notice: notice);
-}

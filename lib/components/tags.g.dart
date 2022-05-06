@@ -68,12 +68,10 @@ class FilterLawTag extends StatelessWidget {
 }
 
 class FoodTag extends StatelessWidget {
-  const FoodTag({Key? key, required this.label}) : super(key: key);
-
-  final String label;
+  const FoodTag({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext _context) => foodTag(label: label);
+  Widget build(BuildContext _context) => foodTag();
 }
 
 class FilterFoodTag extends StatelessWidget {

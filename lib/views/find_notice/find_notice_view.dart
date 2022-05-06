@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/components/tags.dart';
+import 'package:refugee_help_board_frontend/components/list_item.dart';
 import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/constants/tags.dart';
 import 'package:refugee_help_board_frontend/extenstions/string.dart';
-import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
@@ -159,14 +158,3 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
         ),
       ));
 }
-
-@swidget
-Widget listItem({required Notice notice}) => ListTile(
-    contentPadding: const EdgeInsets.all(12),
-    title: Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Text(notice.description),
-    ),
-    subtitle: Row(children: [
-      notice.type == offerType ? const OfferTag() : const RequestTag()
-    ]));

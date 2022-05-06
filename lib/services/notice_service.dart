@@ -64,7 +64,7 @@ class _NoticeService extends StateNotifier<void> {
       final response = await ref
           .read(httpClient)
           .post(serverAddress("/notice"), body: jsonEncode(notice.toJson()));
-
+      print(jsonEncode(notice.toJson()));
       if (response.statusCode == 200) {
         return HttpResult.success(null);
       } else {

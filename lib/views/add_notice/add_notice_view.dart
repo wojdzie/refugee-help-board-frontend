@@ -16,7 +16,7 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
 
   final descriptionController = useTextEditingController();
   final selectedType = useState(requestType);
-  final selectedFilters = useState([]);
+  final selectedFilters = useState(<String>[]);
 
   final isLoading = useState(false);
 
@@ -125,7 +125,8 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
 
                               final notice = Notice(
                                   description: descriptionController.text,
-                                  type: selectedType.value);
+                                  type: selectedType.value,
+                                  tags: selectedFilters.value);
 
                               final result = await ref
                                   .read(noticeApiProvider.notifier)

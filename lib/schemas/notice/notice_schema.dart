@@ -10,6 +10,7 @@ class Notice with _$Notice {
     String? author,
     required String type,
     required String description,
+    required List<String> tags,
   }) = _Notice;
 
   factory Notice.fromJson(Map<String, Object?> json) => _$NoticeFromJson(json);

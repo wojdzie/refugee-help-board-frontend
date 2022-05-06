@@ -25,7 +25,7 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
     noticeApi.fetchFiltered(selectedType.value, selectedFilters.value);
 
     return null;
-  }, [selectedType, selectedFilters]);
+  }, [selectedType.value, selectedFilters.value]);
 
   return MaterialApp(
       title: 'Notice finder',

@@ -10,8 +10,8 @@ enum FetchFailures { systemError }
 
 enum PostFailures { systemError }
 
-class _NoticeService extends StateNotifier<void> {
-  _NoticeService(this.ref) : super(null);
+class NoticeService extends StateNotifier<void> {
+  NoticeService(this.ref) : super(null);
 
   final Ref ref;
 
@@ -76,4 +76,4 @@ class _NoticeService extends StateNotifier<void> {
   }
 }
 
-final noticeApiProvider = StateNotifierProvider((ref) => _NoticeService(ref));
+final noticeApiProvider = StateNotifierProvider((ref) => NoticeService(ref));

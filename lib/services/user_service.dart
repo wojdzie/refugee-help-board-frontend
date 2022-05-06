@@ -39,6 +39,8 @@ class _UserService extends StateNotifier<void> {
           serverAddress("/user/authenticate"),
           body: jsonEncode(user.toJson()));
 
+      print(response.body);
+
       if (response.statusCode == 200) {
         ref
             .read(userProvider.notifier)
@@ -51,6 +53,30 @@ class _UserService extends StateNotifier<void> {
     } catch (error) {
       return HttpResult.failure(LoginFailures.systemError);
     }
+  }
+
+  Future<HttpResult<void, LoginFailures>> modify(User user) async {
+    try {
+      final response = await ref.read(httpClient).patch(
+          serverAddress("/user/authenticate"),
+          body: jsonEncode(user.toJson()));
+
+      if (response.statusCode == 200) {
+        ref
+            .read(userProvider.notifier)
+            .update((state) => User.fromJson(jsonDecode(response.body)));
+
+        return HttpResult.success(null);
+      } else {
+        return HttpResult.failure(LoginFailures.wrongPassword);
+      }
+    } catch (error) {
+      return HttpResult.failure(LoginFailures.systemError);
+    }
+  }
+
+  void logout() async {
+    ref.read(userProvider.notifier).update((state) => null);
   }
 }
 

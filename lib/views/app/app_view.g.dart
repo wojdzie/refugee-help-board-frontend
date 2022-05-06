@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'list_view.dart';
+part of 'app_view.dart';
 
 // **************************************************************************
 // FunctionalWidgetGenerator

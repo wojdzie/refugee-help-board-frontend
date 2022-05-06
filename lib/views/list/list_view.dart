@@ -22,7 +22,16 @@ Widget appView(BuildContext ctx, WidgetRef ref) {
   }, []);
 
   return Scaffold(
-    appBar: AppBar(title: const Text("List of notices")),
+    appBar: AppBar(
+      title: const Text("List of notices"),
+      actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.of(ctx).pushNamed("/find-notice");
+            },
+            icon: const Icon(Icons.search))
+      ],
+    ),
     body: Center(
         child: notices != null
             ? RefreshIndicator(

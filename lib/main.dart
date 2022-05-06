@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/views/add_notice/add_notice_view.dart';
+import 'package:refugee_help_board_frontend/views/find_notice/find_notice_view.dart';
 import 'package:refugee_help_board_frontend/views/landing/landing_view.dart';
 import 'package:refugee_help_board_frontend/views/list/list_view.dart';
 import 'package:refugee_help_board_frontend/views/login/login_view.dart';
@@ -26,4 +27,5 @@ Widget myApp(BuildContext ctx) => MaterialApp(
           "/login": (context) => const LoginView(),
           "/app": (context) => const AppView(),
           "/add-notice": (context) => const AddNoticeView(),
+          "/find-notice": (context) => const FindNoticeView(),
         });

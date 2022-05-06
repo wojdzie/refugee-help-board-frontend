@@ -37,9 +37,10 @@ class _NoticeService extends StateNotifier<void> {
   }
 
   Future<HttpResult<void, FetchFailures>> fetchFiltered(
-      List<String> tags) async {
+      String type, List<String> tags) async {
     try {
-      final response = await ref.read(httpClient).get(serverAddress("/notice"));
+      final response = await ref.read(httpClient).get(
+          serverAddress("/filter/filterTags", {"type": type, "tags": tags}));
 
       if (response.statusCode == 200) {
         final iterable =

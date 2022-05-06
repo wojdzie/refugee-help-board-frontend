@@ -22,8 +22,10 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
   final selectedFilters = useState(<String>[]);
 
   useEffect(() {
-    noticeApi.fetchFiltered(selectedFilters.value);
-  }, [selectedFilters]);
+    noticeApi.fetchFiltered(selectedType.value, selectedFilters.value);
+
+    return null;
+  }, [selectedType, selectedFilters]);
 
   return MaterialApp(
       title: 'Notice finder',

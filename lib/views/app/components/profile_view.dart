@@ -64,9 +64,7 @@ Widget profileView(BuildContext ctx, WidgetRef ref) {
                             password: passwordController.text,
                             email: emailController.text);
 
-                        final result = await ref
-                            .read(userApiProvider.notifier)
-                            .modify(user);
+                        final result = await userApi.modify(user);
 
                         ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
 

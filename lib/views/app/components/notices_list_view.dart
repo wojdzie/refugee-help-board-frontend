@@ -8,10 +8,10 @@ import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
-part "list_view.g.dart";
+part 'notices_list_view.g.dart';
 
 @hcwidget
-Widget appView(BuildContext ctx, WidgetRef ref) {
+Widget noticesListView(WidgetRef ref) {
   final notices = ref.watch(noticesProvider);
   final noticeApi = ref.watch(noticeApiProvider.notifier);
 
@@ -21,35 +21,17 @@ Widget appView(BuildContext ctx, WidgetRef ref) {
     return null;
   }, []);
 
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text("List of notices"),
-      actions: [
-        IconButton(
-            onPressed: () {
-              Navigator.of(ctx).pushNamed("/find-notice");
-            },
-            icon: const Icon(Icons.search))
-      ],
-    ),
-    body: Center(
-        child: notices != null
-            ? RefreshIndicator(
-                child: ListView.separated(
-                  itemCount: notices.length,
-                  itemBuilder: (ctx, index) =>
-                      ListItem(notice: notices[notices.length - 1 - index]),
-                  separatorBuilder: (ctx, index) => const Divider(),
-                ),
-                onRefresh: () => noticeApi.fetch())
-            : const CircularProgressIndicator()),
-    floatingActionButton: FloatingActionButton(
-      child: const Icon(Icons.add),
-      onPressed: () {
-        Navigator.of(ctx).pushNamed("/add-notice");
-      },
-    ),
-  );
+  return Center(
+      child: notices != null
+          ? RefreshIndicator(
+              child: ListView.separated(
+                itemCount: notices.length,
+                itemBuilder: (ctx, index) =>
+                    ListItem(notice: notices[notices.length - 1 - index]),
+                separatorBuilder: (ctx, index) => const Divider(),
+              ),
+              onRefresh: () => noticeApi.fetch())
+          : const CircularProgressIndicator());
 }
 
 @swidget

@@ -19,7 +19,7 @@ Widget landingView(BuildContext ctx) => Scaffold(
         ),
         Container(
             margin: const EdgeInsets.only(bottom: 40),
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
@@ -29,6 +29,10 @@ Widget landingView(BuildContext ctx) => Scaffold(
                 ElevatedButton(
                   child: const Text("Login"),
                   onPressed: () => Navigator.pushNamed(ctx, "/login"),
+                ),
+                ElevatedButton(
+                  child: const Text("Reports"),
+                  onPressed: () => Navigator.pushNamed(ctx, "/report"),
                 ),
               ],
             ))

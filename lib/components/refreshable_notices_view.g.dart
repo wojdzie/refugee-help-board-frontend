@@ -1,15 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'notices_list_view.dart';
+part of 'refreshable_notices_view.dart';
 
 // **************************************************************************
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class NoticesListView extends HookConsumerWidget {
-  const NoticesListView({Key? key}) : super(key: key);
+class RefreshableNoticesView extends ConsumerWidget {
+  const RefreshableNoticesView({Key? key, this.notices}) : super(key: key);
+
+  final List<Notice>? notices;
 
   @override
   Widget build(BuildContext _context, WidgetRef _ref) =>
-      noticesListView(_context, _ref);
+      refreshableNoticesView(_context, _ref, notices: notices);
 }

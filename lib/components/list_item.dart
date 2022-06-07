@@ -19,6 +19,9 @@ Widget listItem({required Notice notice}) => ListTile(
           alignment: Alignment.centerLeft,
           child:
               notice.type == offerType ? const OfferTag() : const RequestTag()),
+      const SizedBox(
+        height: 16,
+      ),
       Row(
           children: notice.tags.map((tag) {
         switch (tag) {

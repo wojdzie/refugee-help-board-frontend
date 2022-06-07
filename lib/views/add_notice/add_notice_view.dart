@@ -31,7 +31,8 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
               children: [
                 TextFormField(
                   controller: descriptionController,
-                  maxLines: 8,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
                   decoration: const InputDecoration(
                     labelText: 'Description',
                   ),

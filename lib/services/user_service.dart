@@ -39,8 +39,6 @@ class _UserService extends StateNotifier<void> {
           serverAddress("/user/authenticate"),
           body: jsonEncode(user.toJson()));
 
-      print(response.body);
-
       if (response.statusCode == 200) {
         ref
             .read(userProvider.notifier)

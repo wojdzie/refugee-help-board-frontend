@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/components/tags.dart';
-import 'package:refugee_help_board_frontend/constants/notice.dart';
-import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/schemas/user/user_schema.dart';
 import 'package:refugee_help_board_frontend/services/user_service.dart';
 import 'package:refugee_help_board_frontend/stores/user_store.dart';
@@ -15,7 +12,6 @@ part 'profile_view.g.dart';
 Widget profileView(BuildContext ctx, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
   final user = ref.watch(userProvider);
-  final userApi = ref.watch(userApiProvider.notifier);
 
   final loginController = useTextEditingController(text: user?.login ?? "");
   final passwordController =

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/components/tags.dart';
-import 'package:refugee_help_board_frontend/constants/notice.dart';
-import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/user_service.dart';
 import 'package:refugee_help_board_frontend/stores/user_store.dart';
 import 'package:refugee_help_board_frontend/views/app/components/notices_list_view.dart';
@@ -20,23 +17,28 @@ Widget appView(BuildContext ctx, WidgetRef ref) {
   final userApi = ref.watch(userApiProvider.notifier);
   final currentPage = useState(AppPages.noticesList);
 
+  if (user == null) {
+    return CircularProgressIndicator();
+  }
+
   return Scaffold(
     drawer: Drawer(
         child: Column(
       children: [
-        DrawerHeader(
-            padding: const EdgeInsets.all(24),
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Align(
-                alignment: Alignment.bottomRight,
-                child: user != null
-                    ? Text("Hello, ${user.login}" +
-                        (user.email != null && user.email != ""
-                            ? "(${user.email})!"
-                            : "!"))
-                    : const Text("Refugee app"))),
+        UserAccountsDrawerHeader(
+          accountName: Text(user.login),
+          accountEmail: user.email != null ? Text(user.email!) : null,
+          currentAccountPicture:
+              const CircleAvatar(child: Icon(Icons.person_outline, size: 48)),
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            colors: [
+              Color(0xFF42A5F5),
+              Color(0xFF1976D2),
+              Color(0xFF0D47A1),
+            ],
+          )),
+        ),
         ListTile(
           title: const Text('Notices list'),
           leading: const Icon(Icons.list),

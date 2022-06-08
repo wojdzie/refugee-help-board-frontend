@@ -34,19 +34,20 @@ class ReportStorage {
 }
 
 class ReportService extends StateNotifier<void> {
-  ReportStorage offersService = ReportStorage(name: "offers");
-  ReportStorage requestsService = ReportStorage(name: "requests");
+  ReportStorage overviewService = ReportStorage(name: "Overiview");
+  ReportStorage periodicService = ReportStorage(name: "Periodic");
 
   ReportService(this.ref) : super(null);
 
   final Ref ref;
 
-  Future<HttpResult<void, FetchFailures>> fetchOffers() async {
+  Future<HttpResult<void, FetchFailures>> fetchOverview() async {
     try {
-      final response = await ref.read(httpClient).get(serverAddress("/notice"));
+      final response =
+          await ref.read(httpClient).get(serverAddress("/overview"));
 
       if (response.statusCode == 200) {
-        offersService.writeContent(response.body);
+        overviewService.writeContent(response.body);
 
         return HttpResult.success(null);
       } else {
@@ -57,12 +58,14 @@ class ReportService extends StateNotifier<void> {
     }
   }
 
-  Future<HttpResult<void, FetchFailures>> fetchRequests() async {
+  Future<HttpResult<void, FetchFailures>> fetchPeriodic(
+      DateTime? from, DateTime? to) async {
     try {
-      final response = await ref.read(httpClient).get(serverAddress("/notice"));
+      final response =
+          await ref.read(httpClient).get(serverAddress("/periodic"));
 
       if (response.statusCode == 200) {
-        requestsService.writeContent(response.body);
+        periodicService.writeContent(response.body);
 
         return HttpResult.success(null);
       } else {

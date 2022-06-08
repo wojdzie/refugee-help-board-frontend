@@ -9,6 +9,7 @@ import 'package:refugee_help_board_frontend/views/app/app_view.dart';
 import 'package:refugee_help_board_frontend/views/login/login_view.dart';
 import 'package:refugee_help_board_frontend/views/register/register_view.dart';
 import 'package:refugee_help_board_frontend/views/report_view/report_view.dart';
+import 'package:refugee_help_board_frontend/views/periodic_report_view/periodic_report_view.dart';
 part 'main.g.dart';
 
 void main() {
@@ -30,4 +31,5 @@ Widget myApp(BuildContext ctx) => MaterialApp(
           "/add-notice": (context) => const AddNoticeView(),
           "/find-notice": (context) => const FindNoticeView(),
           "/report": (context) => const ReportView(),
+          "/periodic-report": (context) => const PeriodicReport(),
         });

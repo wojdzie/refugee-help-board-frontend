@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/services/report_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:functional_widget_annotation/functional_widget_annotation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/schemas/user/user_schema.dart';
-import 'package:refugee_help_board_frontend/services/user_service.dart';
 
 part "periodic_report_view.g.dart";
 
@@ -18,11 +13,10 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
   final fromController = useTextEditingController();
   final toController = useTextEditingController();
 
-  // DateTime? toDate;
-  // DateTime? fromDate;
-
   final toDate = useState<DateTime?>(null);
   final fromDate = useState<DateTime?>(null);
+
+  final isLoading = useState(false);
 
   useEffect(() {
     if (fromDate.value == null) {
@@ -39,8 +33,6 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
       toController.text = toDate.value.toString().split(" ").first;
     }
   }, [toDate.value]);
-
-  final isLoading = useState(false);
 
   return Scaffold(
       appBar: AppBar(title: const Text("From: ")),
@@ -106,30 +98,14 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
 
                                   isLoading.value = true;
 
-                                  // final user = User(
-                                  //     login: fromController.text,
-                                  //     password: toController.text);
-
                                   final result = await ref
                                       .read(reportApiProvider.notifier)
                                       .fetchPeriodic(
                                           fromDate.value, toDate.value);
-                                  // .login(user);
 
                                   ScaffoldMessenger.of(ctx)
                                       .hideCurrentSnackBar();
                                   isLoading.value = false;
-
-                                  if (result.isSuccess) {
-                                    Navigator.of(ctx).pushNamedAndRemoveUntil(
-                                        "/app", (_) => false);
-                                  } else {
-                                    ScaffoldMessenger.of(ctx).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text(result.error.toString())),
-                                    );
-                                  }
                                 }
                               },
                         child: isLoading.value

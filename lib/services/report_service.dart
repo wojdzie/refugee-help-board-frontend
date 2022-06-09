@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:refugee_help_board_frontend/constants/backend.dart';
@@ -44,7 +43,7 @@ class ReportService extends StateNotifier<void> {
   Future<HttpResult<void, FetchFailures>> fetchOverview() async {
     try {
       final response =
-          await ref.read(httpClient).get(serverAddress("/overview"));
+          await ref.read(httpClient).get(serverAddress("/report/overview"));
 
       if (response.statusCode == 200) {
         overviewService.writeContent(response.body);
@@ -61,8 +60,9 @@ class ReportService extends StateNotifier<void> {
   Future<HttpResult<void, FetchFailures>> fetchPeriodic(
       DateTime? from, DateTime? to) async {
     try {
-      final response =
-          await ref.read(httpClient).get(serverAddress("/periodic"));
+      final response = await ref.read(httpClient).get(serverAddress(
+          "/report/periodic",
+          {"from": from!.toIso8601String(), "to": to!.toIso8601String()}));
 
       if (response.statusCode == 200) {
         periodicService.writeContent(response.body);

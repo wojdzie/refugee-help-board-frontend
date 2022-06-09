@@ -13,16 +13,14 @@ Widget reportView(BuildContext ctx, WidgetRef ref) => Scaffold(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
-            child: const Text("Offers report"),
+            child: const Text("Overview report"),
             onPressed: () async {
-              await ref.read(reportApiProvider.notifier).fetchOffers();
+              await ref.read(reportApiProvider.notifier).fetchOverview();
             },
           ),
           ElevatedButton(
-            child: const Text("Requests report"),
-            onPressed: () async {
-              await ref.read(reportApiProvider.notifier).fetchRequests();
-            },
+            child: const Text("Periodic report"),
+            onPressed: () => Navigator.pushNamed(ctx, "/periodic-report"),
           ),
         ],
       ),

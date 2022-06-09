@@ -1,0 +1,31 @@
+import 'dart:io';
+
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+
+class Storage {
+  String directory;
+
+  Storage({required this.directory});
+
+  Future<Directory> get localDirectory async {
+    final appDirectory = await getApplicationDocumentsDirectory();
+
+    final storageDirectory = Directory(join(appDirectory.path, directory));
+
+    if (!await storageDirectory.exists()) {
+      storageDirectory.create();
+    }
+
+    return storageDirectory;
+  }
+
+  Future<File> writeFile(String filename, String content,
+      [String? extension]) async {
+    final directory = await localDirectory;
+
+    final name = extension != null ? "$filename.$extension" : filename;
+
+    return File(join(directory.path, name)).writeAsString(content);
+  }
+}

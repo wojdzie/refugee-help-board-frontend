@@ -7,8 +7,12 @@ part of 'export_notices_dialog.dart';
 // **************************************************************************
 
 class ExportNoticesDialog extends HookWidget {
-  const ExportNoticesDialog({Key? key}) : super(key: key);
+  const ExportNoticesDialog({Key? key, required this.notices})
+      : super(key: key);
+
+  final List<Notice> notices;
 
   @override
-  Widget build(BuildContext _context) => exportNoticesDialog(_context);
+  Widget build(BuildContext _context) =>
+      exportNoticesDialog(_context, notices: notices);
 }

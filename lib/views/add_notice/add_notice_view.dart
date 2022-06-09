@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/views/add_notice/components/add_notice_tile.dart';
@@ -17,9 +16,6 @@ const baseNotice = Notice(description: "", tags: [], type: "XD");
 @hcwidget
 Widget addNoticeView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
-
-  final selectedType = useState(requestType);
-  final selectedFilters = useState(<String>[]);
 
   final nextId = useState(1);
   final noticesFormsData = useState([Tuple2(0, baseNotice.copyWith())]);
@@ -164,7 +160,10 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (_) => const ExportNoticesDialog());
+                  builder: (_) => ExportNoticesDialog(
+                      notices: noticesFormsData.value
+                          .map((noticeForms) => noticeForms.item2)
+                          .toList()));
             },
           ),
           const Spacer(),

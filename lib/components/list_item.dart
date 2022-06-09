@@ -15,21 +15,33 @@ Widget listItem({required Notice notice}) => ListTile(
       child: Text(notice.description),
     ),
     subtitle: Column(children: [
+      const SizedBox(
+        height: 16,
+      ),
       Align(
           alignment: Alignment.centerLeft,
           child:
               notice.type == offerType ? const OfferTag() : const RequestTag()),
-      Row(
-          children: notice.tags.map((tag) {
-        switch (tag) {
-          case accomodationLabel:
-            return const AccomodationTag();
-          case foodLabel:
-            return const FoodTag();
-          case lawLabel:
-            return const LawTag();
-          default:
-            return Container();
-        }
-      }).toList())
+      notice.tags.isNotEmpty
+          ? Column(
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                Row(
+                    children: notice.tags.map((tag) {
+                  switch (tag) {
+                    case accomodationLabel:
+                      return const AccomodationTag();
+                    case foodLabel:
+                      return const FoodTag();
+                    case lawLabel:
+                      return const LawTag();
+                    default:
+                      return Container();
+                  }
+                }).toList())
+              ],
+            )
+          : Container()
     ]));

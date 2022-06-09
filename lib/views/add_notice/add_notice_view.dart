@@ -2,160 +2,144 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/components/tags.dart';
 import 'package:refugee_help_board_frontend/constants/notice.dart';
-import 'package:refugee_help_board_frontend/constants/tags.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/add_notice_tile.dart';
+import 'package:tuple/tuple.dart';
 
 part "add_notice_view.g.dart";
+
+const baseNotice = Notice(description: "", tags: [], type: "XD");
 
 @hcwidget
 Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
-  final descriptionController = useTextEditingController();
   final selectedType = useState(requestType);
   final selectedFilters = useState(<String>[]);
 
+  final nextId = useState(1);
+  final noticesFormsData = useState([Tuple2(0, baseNotice.copyWith())]);
+
+  final noticesWidgets = useMemoized(
+      () => noticesFormsData.value.asMap().entries.map((entry) => AddNoticeTile(
+            key: Key(entry.value.item1.toString()),
+            count: entry.key + 1,
+            onChange: (notice) {
+              var idx = noticesFormsData.value
+                  .indexWhere((tuple) => tuple.item1 == entry.value.item1);
+
+              noticesFormsData.value
+                ..removeAt(idx)
+                ..insert(idx, Tuple2(entry.value.item1, notice));
+            },
+            onRemove: noticesFormsData.value.length != 1
+                ? () {
+                    noticesFormsData.value = [
+                      ...noticesFormsData.value
+                        ..removeWhere(
+                            (value) => value.item1 == entry.value.item1)
+                    ];
+                  }
+                : null,
+          )),
+      [noticesFormsData.value]);
+
   final isLoading = useState(false);
 
+  final submitFunction = useCallback(() async {
+    if (key.currentState!.validate()) {
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        const SnackBar(content: Text('Adding notice(s)...')),
+      );
+
+      isLoading.value = true;
+
+      final results = await Future.wait(noticesFormsData.value.map(
+          (tuple) => ref.read(noticeApiProvider.notifier).post(tuple.item2)));
+
+      ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
+
+      isLoading.value = false;
+
+      final isSuccess =
+          !results.map((result) => result.isSuccess).any((element) => false);
+
+      if (isSuccess) {
+        Navigator.of(ctx).pop();
+      } else {
+        var errors = results
+            .where((result) => !result.isSuccess)
+            .map((failure) => failure.error)
+            .map((error) => error.toString());
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(content: Text(errors.toString())),
+        );
+      }
+    }
+  }, []);
+
   return Scaffold(
-      appBar: AppBar(title: const Text("Add new notice")),
-      body: Form(
-          key: key,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: descriptionController,
-                  maxLines: 8,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Login can\'t be empty';
-                    }
-                    return null;
+    appBar: AppBar(title: const Text("Add new notice(s)")),
+    body: Form(
+        key: key,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12),
+          child: ListView(
+            children: [
+              ...noticesWidgets,
+              const Divider(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  child: const Text("Add next notice"),
+                  onPressed: () {
+                    noticesFormsData.value = [
+                      ...noticesFormsData.value,
+                      Tuple2(nextId.value, baseNotice.copyWith())
+                    ];
+                    nextId.value++;
                   },
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Row(
-                  children: [
-                    ChoiceRequestTag(
-                        selected: selectedType.value == requestType,
-                        onSelected: (bool selected) {
-                          selectedType.value = requestType;
-                        }),
-                    const SizedBox(width: 12),
-                    ChoiceOfferTag(
-                        selected: selectedType.value == offerType,
-                        onSelected: (bool selected) {
-                          selectedType.value = offerType;
-                        }),
-                  ],
-                ),
-                Row(
-                  children: [
-                    FilterAccomodationTag(
-                        selected:
-                            selectedFilters.value.contains(accomodationLabel),
-                        onSelected: (selected) {
-                          if (selected) {
-                            selectedFilters.value = [
-                              ...selectedFilters.value,
-                              accomodationLabel
-                            ];
-                          } else {
-                            selectedFilters.value = selectedFilters.value
-                                .where((filter) => filter != accomodationLabel)
-                                .toList();
-                          }
-                        }),
-                    const SizedBox(width: 12),
-                    FilterFoodTag(
-                        selected: selectedFilters.value.contains(foodLabel),
-                        onSelected: (selected) {
-                          if (selected) {
-                            selectedFilters.value = [
-                              ...selectedFilters.value,
-                              foodLabel
-                            ];
-                          } else {
-                            selectedFilters.value = selectedFilters.value
-                                .where((filter) => filter != foodLabel)
-                                .toList();
-                          }
-                        }),
-                    const SizedBox(width: 12),
-                    FilterLawTag(
-                        selected: selectedFilters.value.contains(lawLabel),
-                        onSelected: (selected) {
-                          if (selected) {
-                            selectedFilters.value = [
-                              ...selectedFilters.value,
-                              lawLabel
-                            ];
-                          } else {
-                            selectedFilters.value = selectedFilters.value
-                                .where((filter) => filter != lawLabel)
-                                .toList();
-                          }
-                        }),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton(
-                    onPressed: isLoading.value
-                        ? null
-                        : () async {
-                            if (key.currentState!.validate()) {
-                              ScaffoldMessenger.of(ctx).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Adding notice...')),
-                              );
-
-                              isLoading.value = true;
-
-                              final notice = Notice(
-                                  description: descriptionController.text,
-                                  type: selectedType.value,
-                                  tags: selectedFilters.value);
-
-                              final result = await ref
-                                  .read(noticeApiProvider.notifier)
-                                  .post(notice);
-
-                              ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
-
-                              isLoading.value = false;
-
-                              if (result.isSuccess) {
-                                Navigator.of(ctx).pop();
-                              } else {
-                                ScaffoldMessenger.of(ctx).showSnackBar(
-                                  SnackBar(
-                                      content: Text(result.error.toString())),
-                                );
-                              }
-                            }
-                          },
-                    child: isLoading.value
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(),
-                          )
-                        : const Text('Submit'),
-                  ),
-                ),
-              ],
-            ),
-          )));
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+            ],
+          ),
+        )),
+    bottomNavigationBar: BottomAppBar(
+        child: Padding(
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: <Widget>[
+          ElevatedButton.icon(
+            icon: const Icon(Icons.restore),
+            label: const Text("Restore"),
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.save),
+            label: const Text("Save"),
+            onPressed: () {},
+          ),
+          const Spacer(),
+          ElevatedButton(
+            onPressed: isLoading.value ? null : submitFunction,
+            child: isLoading.value
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(),
+                  )
+                : const Text('Submit'),
+          ),
+        ],
+      ),
+    )),
+  );
 }

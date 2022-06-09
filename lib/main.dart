@@ -21,7 +21,7 @@ void main() {
 @swidget
 Widget myApp(BuildContext ctx) => MaterialApp(
         title: "Refugee App",
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
         routes: {
           "/": (context) => const LandingView(),
           "/register": (context) => const RegisterView(),

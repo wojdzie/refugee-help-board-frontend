@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:refugee_help_board_frontend/components/list_item.dart';
+import 'package:refugee_help_board_frontend/components/refreshable_notices_view.dart';
 import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/constants/tags.dart';
 import 'package:refugee_help_board_frontend/extenstions/string.dart';
@@ -15,13 +15,14 @@ part "find_notice_view.g.dart";
 @hcwidget
 Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
   final filteredNotices = ref.watch(filteredNoticesProvider);
-  final noticeApi = ref.watch(noticeApiProvider.notifier);
 
   final selectedType = useState(requestType);
   final selectedFilters = useState(<String>[]);
 
   useEffect(() {
-    noticeApi.fetchFiltered(selectedType.value, selectedFilters.value);
+    ref
+        .read(noticeApiProvider.notifier)
+        .fetchFiltered(selectedType.value, selectedFilters.value);
 
     return null;
   }, [selectedType.value, selectedFilters.value]);
@@ -29,6 +30,7 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
   return MaterialApp(
       title: 'Notice finder',
       theme: ThemeData(
+          useMaterial3: true,
           primaryColor: Colors.indigo,
           unselectedWidgetColor: Colors.white,
           toggleableActiveColor: Colors.white,
@@ -37,8 +39,10 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
             checkColor: MaterialStateProperty.all<Color>(Colors.indigo),
           )),
       home: BackdropScaffold(
+        revealBackLayerAtStart: true,
         appBar: BackdropAppBar(
           backgroundColor: Colors.indigo,
+          foregroundColor: Colors.white,
           title: const Text("Find notices"),
           leading: IconButton(
               color: Colors.white,
@@ -144,17 +148,9 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
         frontLayer: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Center(
-              child: filteredNotices != null
-                  ? RefreshIndicator(
-                      child: ListView.separated(
-                        itemCount: filteredNotices.length,
-                        itemBuilder: (ctx, index) => ListItem(
-                            notice: filteredNotices[
-                                filteredNotices.length - 1 - index]),
-                        separatorBuilder: (ctx, index) => const Divider(),
-                      ),
-                      onRefresh: () => noticeApi.fetch())
-                  : const CircularProgressIndicator()),
+              child: RefreshableNoticesView(
+            notices: filteredNotices,
+          )),
         ),
       ));
 }

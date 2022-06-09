@@ -26,6 +26,15 @@ class Storage {
 
     final name = extension != null ? "$filename.$extension" : filename;
 
-    return File(join(directory.path, name)).writeAsString(content);
+    return await File(join(directory.path, name)).writeAsString(content);
+  }
+
+  Future<File> writeFileAsBytes(String filename, List<int> content,
+      [String? extension]) async {
+    final directory = await localDirectory;
+
+    final name = extension != null ? "$filename.$extension" : filename;
+
+    return await File(join(directory.path, name)).writeAsBytes(content);
   }
 }

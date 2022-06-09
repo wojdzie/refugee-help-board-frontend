@@ -14,8 +14,6 @@ class LandingClipper extends CustomClipper<Path> {
 
     const difference = 0.1;
 
-    final rng = Random();
-
     final waveStart = height * (1 - difference * 2);
     final waveControl1 = height * (1 - difference * 1 / 2);
     final waveMiddle = height * (1 - difference);
@@ -56,8 +54,14 @@ Widget landingView(BuildContext ctx) => Scaffold(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                     Text(
-                      "Welcome in refugee app",
+                      "Thank you for help",
                       style: Theme.of(ctx).textTheme.headline4,
+                    ),
+                    const SizedBox(height: 64),
+                    TextButton(
+                      child: Text("See how community is helping",
+                          style: Theme.of(ctx).textTheme.headline6),
+                      onPressed: () => Navigator.pushNamed(ctx, "/report"),
                     ),
                   ])),
             ),

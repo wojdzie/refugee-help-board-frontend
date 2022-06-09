@@ -18,7 +18,7 @@ Widget appView(BuildContext ctx, WidgetRef ref) {
   final currentPage = useState(AppPages.noticesList);
 
   if (user == null) {
-    return CircularProgressIndicator();
+    return const CircularProgressIndicator();
   }
 
   return Scaffold(

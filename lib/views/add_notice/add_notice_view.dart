@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
@@ -5,7 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
-import 'package:refugee_help_board_frontend/views/add_notice/add_notice_tile.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/components/add_notice_tile.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/components/export_notices_dialog.dart';
 import 'package:tuple/tuple.dart';
 
 part "add_notice_view.g.dart";
@@ -13,7 +15,7 @@ part "add_notice_view.g.dart";
 const baseNotice = Notice(description: "", tags: [], type: "XD");
 
 @hcwidget
-Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
+Widget addNoticeView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
   final selectedType = useState(requestType);
@@ -50,7 +52,7 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
 
   final submitFunction = useCallback(() async {
     if (key.currentState!.validate()) {
-      ScaffoldMessenger.of(ctx).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Adding notice(s)...')),
       );
 
@@ -59,7 +61,7 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
       final results = await Future.wait(noticesFormsData.value.map(
           (tuple) => ref.read(noticeApiProvider.notifier).post(tuple.item2)));
 
-      ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       isLoading.value = false;
 
@@ -67,13 +69,13 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
           !results.map((result) => result.isSuccess).any((element) => false);
 
       if (isSuccess) {
-        Navigator.of(ctx).pop();
+        Navigator.of(context).pop();
       } else {
         var errors = results
             .where((result) => !result.isSuccess)
             .map((failure) => failure.error)
             .map((error) => error.toString());
-        ScaffoldMessenger.of(ctx).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errors.toString())),
         );
       }
@@ -117,7 +119,41 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
           ElevatedButton.icon(
             icon: const Icon(Icons.restore),
             label: const Text("Restore"),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        title: const Text("Restore"),
+                        content: const Text(
+                            "Warning: Restoration from file will destroy your data. Do you want to proceed?"),
+                        actions: [
+                          TextButton(
+                              onPressed: () async {
+                                try {
+                                  var result =
+                                      await FilePicker.platform.pickFiles();
+
+                                  if (result != null) {
+                                    print(result.files.single.path);
+                                  }
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "This operating system doesn't support restoration feature")),
+                                  );
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text("Yes")),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("No")),
+                        ],
+                      ));
+            },
           ),
           const SizedBox(
             width: 12,
@@ -125,7 +161,11 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
           ElevatedButton.icon(
             icon: const Icon(Icons.save),
             label: const Text("Save"),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => const ExportNoticesDialog());
+            },
           ),
           const Spacer(),
           ElevatedButton(

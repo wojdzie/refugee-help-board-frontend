@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/constants/backend.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/http_client.dart';
-import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
 enum FetchFailures { systemError }
 

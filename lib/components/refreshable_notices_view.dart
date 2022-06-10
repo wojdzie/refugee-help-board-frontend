@@ -4,8 +4,6 @@ import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/components/list_item.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
-import 'package:refugee_help_board_frontend/services/notice_service.dart';
-import 'package:refugee_help_board_frontend/stores/user_store.dart';
 
 part 'refreshable_notices_view.g.dart';
 

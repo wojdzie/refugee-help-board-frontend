@@ -1,28 +1,26 @@
+import 'dart:convert';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/constants/backend.dart';
 import 'package:refugee_help_board_frontend/services/http_client.dart';
-import 'package:refugee_help_board_frontend/utils/storage.dart';
 
 enum FetchFailures { systemError }
 
 enum PostFailures { systemError }
 
 class ReportService extends StateNotifier<void> {
-  var reportStorage = Storage(directory: "report");
-
   ReportService(this.ref) : super(null);
 
   final Ref ref;
 
-  Future<HttpResult<void, FetchFailures>> fetchOverview() async {
+  Future<HttpResult<Map<String, dynamic>, FetchFailures>>
+      fetchOverview() async {
     try {
       final response =
           await ref.read(httpClient).get(serverAddress("/report/overview"));
 
       if (response.statusCode == 200) {
-        reportStorage.writeFile("overview", response.body, "json");
-
-        return HttpResult.success(null);
+        return HttpResult.success(json.decode(response.body));
       } else {
         return HttpResult.failure(FetchFailures.systemError);
       }
@@ -31,7 +29,7 @@ class ReportService extends StateNotifier<void> {
     }
   }
 
-  Future<HttpResult<void, FetchFailures>> fetchPeriodic(
+  Future<HttpResult<Map<String, dynamic>, FetchFailures>> fetchPeriodic(
       DateTime? from, DateTime? to) async {
     try {
       final response = await ref.read(httpClient).get(serverAddress(
@@ -39,9 +37,9 @@ class ReportService extends StateNotifier<void> {
           {"from": from!.toIso8601String(), "to": to!.toIso8601String()}));
 
       if (response.statusCode == 200) {
-        reportStorage.writeFile("periodic", response.body, "json");
+        // reportStorage.writeFile("periodic", response.body, "json");
 
-        return HttpResult.success(null);
+        return HttpResult.success(json.decode(response.body));
       } else {
         return HttpResult.failure(FetchFailures.systemError);
       }

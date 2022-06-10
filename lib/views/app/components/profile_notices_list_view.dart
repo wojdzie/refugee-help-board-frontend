@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/components/refreshable_notices_view.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
-import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
 part 'profile_notices_list_view.g.dart';
 

@@ -9,7 +9,6 @@ import 'package:refugee_help_board_frontend/constants/tags.dart';
 import 'package:refugee_help_board_frontend/extenstions/string.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
-import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
 part "find_notice_view.g.dart";
 

@@ -25,12 +25,14 @@ class _$NoticeTearOff {
       {String? author,
       required String type,
       required String description,
-      required List<String> tags}) {
+      required List<String> tags,
+      String? creationData}) {
     return _Notice(
       author: author,
       type: type,
       description: description,
       tags: tags,
+      creationData: creationData,
     );
   }
 
@@ -48,6 +50,7 @@ mixin _$Notice {
   String get type => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
+  String? get creationData => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +62,11 @@ abstract class $NoticeCopyWith<$Res> {
   factory $NoticeCopyWith(Notice value, $Res Function(Notice) then) =
       _$NoticeCopyWithImpl<$Res>;
   $Res call(
-      {String? author, String type, String description, List<String> tags});
+      {String? author,
+      String type,
+      String description,
+      List<String> tags,
+      String? creationData});
 }
 
 /// @nodoc
@@ -76,6 +83,7 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
     Object? type = freezed,
     Object? description = freezed,
     Object? tags = freezed,
+    Object? creationData = freezed,
   }) {
     return _then(_value.copyWith(
       author: author == freezed
@@ -94,6 +102,10 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      creationData: creationData == freezed
+          ? _value.creationData
+          : creationData // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -104,7 +116,11 @@ abstract class _$NoticeCopyWith<$Res> implements $NoticeCopyWith<$Res> {
       __$NoticeCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? author, String type, String description, List<String> tags});
+      {String? author,
+      String type,
+      String description,
+      List<String> tags,
+      String? creationData});
 }
 
 /// @nodoc
@@ -122,6 +138,7 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
     Object? type = freezed,
     Object? description = freezed,
     Object? tags = freezed,
+    Object? creationData = freezed,
   }) {
     return _then(_Notice(
       author: author == freezed
@@ -140,6 +157,10 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
           ? _value.tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      creationData: creationData == freezed
+          ? _value.creationData
+          : creationData // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -151,7 +172,8 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
       {this.author,
       required this.type,
       required this.description,
-      required this.tags});
+      required this.tags,
+      this.creationData});
 
   factory _$_Notice.fromJson(Map<String, dynamic> json) =>
       _$$_NoticeFromJson(json);
@@ -164,10 +186,12 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
   final String description;
   @override
   final List<String> tags;
+  @override
+  final String? creationData;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Notice(author: $author, type: $type, description: $description, tags: $tags)';
+    return 'Notice(author: $author, type: $type, description: $description, tags: $tags, creationData: $creationData)';
   }
 
   @override
@@ -178,7 +202,8 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
       ..add(DiagnosticsProperty('author', author))
       ..add(DiagnosticsProperty('type', type))
       ..add(DiagnosticsProperty('description', description))
-      ..add(DiagnosticsProperty('tags', tags));
+      ..add(DiagnosticsProperty('tags', tags))
+      ..add(DiagnosticsProperty('creationData', creationData));
   }
 
   @override
@@ -190,7 +215,9 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
             const DeepCollectionEquality().equals(other.type, type) &&
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
-            const DeepCollectionEquality().equals(other.tags, tags));
+            const DeepCollectionEquality().equals(other.tags, tags) &&
+            const DeepCollectionEquality()
+                .equals(other.creationData, creationData));
   }
 
   @override
@@ -199,7 +226,8 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
       const DeepCollectionEquality().hash(author),
       const DeepCollectionEquality().hash(type),
       const DeepCollectionEquality().hash(description),
-      const DeepCollectionEquality().hash(tags));
+      const DeepCollectionEquality().hash(tags),
+      const DeepCollectionEquality().hash(creationData));
 
   @JsonKey(ignore: true)
   @override
@@ -217,7 +245,8 @@ abstract class _Notice implements Notice {
       {String? author,
       required String type,
       required String description,
-      required List<String> tags}) = _$_Notice;
+      required List<String> tags,
+      String? creationData}) = _$_Notice;
 
   factory _Notice.fromJson(Map<String, dynamic> json) = _$_Notice.fromJson;
 
@@ -229,6 +258,8 @@ abstract class _Notice implements Notice {
   String get description;
   @override
   List<String> get tags;
+  @override
+  String? get creationData;
   @override
   @JsonKey(ignore: true)
   _$NoticeCopyWith<_Notice> get copyWith => throw _privateConstructorUsedError;

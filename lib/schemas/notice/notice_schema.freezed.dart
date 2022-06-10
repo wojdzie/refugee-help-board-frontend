@@ -22,17 +22,21 @@ class _$NoticeTearOff {
   const _$NoticeTearOff();
 
   _Notice call(
-      {String? author,
+      {@JsonKey(name: "_id") String? id,
+      String? author,
       required String type,
       required String description,
       required List<String> tags,
-      String? creationData}) {
+      String? creationData,
+      bool? closed}) {
     return _Notice(
+      id: id,
       author: author,
       type: type,
       description: description,
       tags: tags,
       creationData: creationData,
+      closed: closed,
     );
   }
 
@@ -46,11 +50,14 @@ const $Notice = _$NoticeTearOff();
 
 /// @nodoc
 mixin _$Notice {
+  @JsonKey(name: "_id")
+  String? get id => throw _privateConstructorUsedError;
   String? get author => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
   String? get creationData => throw _privateConstructorUsedError;
+  bool? get closed => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -62,11 +69,13 @@ abstract class $NoticeCopyWith<$Res> {
   factory $NoticeCopyWith(Notice value, $Res Function(Notice) then) =
       _$NoticeCopyWithImpl<$Res>;
   $Res call(
-      {String? author,
+      {@JsonKey(name: "_id") String? id,
+      String? author,
       String type,
       String description,
       List<String> tags,
-      String? creationData});
+      String? creationData,
+      bool? closed});
 }
 
 /// @nodoc
@@ -79,13 +88,19 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? author = freezed,
     Object? type = freezed,
     Object? description = freezed,
     Object? tags = freezed,
     Object? creationData = freezed,
+    Object? closed = freezed,
   }) {
     return _then(_value.copyWith(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       author: author == freezed
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
@@ -106,6 +121,10 @@ class _$NoticeCopyWithImpl<$Res> implements $NoticeCopyWith<$Res> {
           ? _value.creationData
           : creationData // ignore: cast_nullable_to_non_nullable
               as String?,
+      closed: closed == freezed
+          ? _value.closed
+          : closed // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -116,11 +135,13 @@ abstract class _$NoticeCopyWith<$Res> implements $NoticeCopyWith<$Res> {
       __$NoticeCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? author,
+      {@JsonKey(name: "_id") String? id,
+      String? author,
       String type,
       String description,
       List<String> tags,
-      String? creationData});
+      String? creationData,
+      bool? closed});
 }
 
 /// @nodoc
@@ -134,13 +155,19 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? id = freezed,
     Object? author = freezed,
     Object? type = freezed,
     Object? description = freezed,
     Object? tags = freezed,
     Object? creationData = freezed,
+    Object? closed = freezed,
   }) {
     return _then(_Notice(
+      id: id == freezed
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       author: author == freezed
           ? _value.author
           : author // ignore: cast_nullable_to_non_nullable
@@ -161,6 +188,10 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
           ? _value.creationData
           : creationData // ignore: cast_nullable_to_non_nullable
               as String?,
+      closed: closed == freezed
+          ? _value.closed
+          : closed // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -169,15 +200,20 @@ class __$NoticeCopyWithImpl<$Res> extends _$NoticeCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Notice with DiagnosticableTreeMixin implements _Notice {
   const _$_Notice(
-      {this.author,
+      {@JsonKey(name: "_id") this.id,
+      this.author,
       required this.type,
       required this.description,
       required this.tags,
-      this.creationData});
+      this.creationData,
+      this.closed});
 
   factory _$_Notice.fromJson(Map<String, dynamic> json) =>
       _$$_NoticeFromJson(json);
 
+  @override
+  @JsonKey(name: "_id")
+  final String? id;
   @override
   final String? author;
   @override
@@ -188,10 +224,12 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
   final List<String> tags;
   @override
   final String? creationData;
+  @override
+  final bool? closed;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Notice(author: $author, type: $type, description: $description, tags: $tags, creationData: $creationData)';
+    return 'Notice(id: $id, author: $author, type: $type, description: $description, tags: $tags, creationData: $creationData, closed: $closed)';
   }
 
   @override
@@ -199,11 +237,13 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Notice'))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('author', author))
       ..add(DiagnosticsProperty('type', type))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('tags', tags))
-      ..add(DiagnosticsProperty('creationData', creationData));
+      ..add(DiagnosticsProperty('creationData', creationData))
+      ..add(DiagnosticsProperty('closed', closed));
   }
 
   @override
@@ -211,23 +251,27 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Notice &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.author, author) &&
             const DeepCollectionEquality().equals(other.type, type) &&
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
             const DeepCollectionEquality().equals(other.tags, tags) &&
             const DeepCollectionEquality()
-                .equals(other.creationData, creationData));
+                .equals(other.creationData, creationData) &&
+            const DeepCollectionEquality().equals(other.closed, closed));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(author),
       const DeepCollectionEquality().hash(type),
       const DeepCollectionEquality().hash(description),
       const DeepCollectionEquality().hash(tags),
-      const DeepCollectionEquality().hash(creationData));
+      const DeepCollectionEquality().hash(creationData),
+      const DeepCollectionEquality().hash(closed));
 
   @JsonKey(ignore: true)
   @override
@@ -242,14 +286,19 @@ class _$_Notice with DiagnosticableTreeMixin implements _Notice {
 
 abstract class _Notice implements Notice {
   const factory _Notice(
-      {String? author,
+      {@JsonKey(name: "_id") String? id,
+      String? author,
       required String type,
       required String description,
       required List<String> tags,
-      String? creationData}) = _$_Notice;
+      String? creationData,
+      bool? closed}) = _$_Notice;
 
   factory _Notice.fromJson(Map<String, dynamic> json) = _$_Notice.fromJson;
 
+  @override
+  @JsonKey(name: "_id")
+  String? get id;
   @override
   String? get author;
   @override
@@ -260,6 +309,8 @@ abstract class _Notice implements Notice {
   List<String> get tags;
   @override
   String? get creationData;
+  @override
+  bool? get closed;
   @override
   @JsonKey(ignore: true)
   _$NoticeCopyWith<_Notice> get copyWith => throw _privateConstructorUsedError;

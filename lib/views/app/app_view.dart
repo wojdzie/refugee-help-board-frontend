@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:refugee_help_board_frontend/schemas/arguments/add_notice_arguments.dart';
 import 'package:refugee_help_board_frontend/services/user_service.dart';
 import 'package:refugee_help_board_frontend/stores/user_store.dart';
 import 'package:refugee_help_board_frontend/views/app/components/notices_list_view.dart';
@@ -18,6 +19,8 @@ Widget appView(BuildContext context, WidgetRef ref) {
 
   final currentPage = useState(AppPages.noticesList);
   final currentNoticesList = useState(0);
+
+  final onRefresh = useState<Future<void> Function()?>(null);
 
   if (user == null) {
     return const CircularProgressIndicator();
@@ -85,28 +88,32 @@ Widget appView(BuildContext context, WidgetRef ref) {
     ),
     body: currentPage.value == AppPages.noticesList
         ? currentNoticesList.value == 0
-            ? const NoticesListView()
-            : const ProfileNoticesListView()
+            ? NoticesListView(setOnRefresh: onRefresh)
+            : ProfileNoticesListView(setOnRefresh: onRefresh)
         : const ProfileView(),
-    bottomNavigationBar: BottomNavigationBar(
-        onTap: (selected) {
-          currentNoticesList.value = selected;
-        },
-        currentIndex: currentNoticesList.value,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "All notices"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_add),
-            label: "My notices",
-          )
-        ]),
+    bottomNavigationBar: currentPage.value == AppPages.noticesList
+        ? BottomNavigationBar(
+            onTap: (selected) {
+              currentNoticesList.value = selected;
+            },
+            currentIndex: currentNoticesList.value,
+            items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.list), label: "All notices"),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.recent_actors),
+                  label: "My notices",
+                )
+              ])
+        : null,
     floatingActionButton: currentPage.value == AppPages.noticesList
         ? FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed("/add-notice");
+              Navigator.of(context).pushNamed("/add-notice",
+                  arguments: AddNoticeArguments(onRefresh: onRefresh.value!));
             },
           )
-        : Container(),
+        : null,
   );
 }

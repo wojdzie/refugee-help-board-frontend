@@ -10,7 +10,8 @@ import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 part 'profile_notices_list_view.g.dart';
 
 @hcwidget
-Widget profileNoticesListView(BuildContext context, WidgetRef ref) {
+Widget profileNoticesListView(BuildContext context, WidgetRef ref,
+    {required ValueNotifier<Future<void> Function()?> setOnRefresh}) {
   final notices = useState<List<Notice>?>(null);
 
   final onRefresh = useCallback(() async {
@@ -23,6 +24,13 @@ Widget profileNoticesListView(BuildContext context, WidgetRef ref) {
         const SnackBar(content: Text('Problem with fetching notices')),
       );
     }
+  }, []);
+
+  useEffect(() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setOnRefresh.value = onRefresh;
+    });
+    return null;
   }, []);
 
   useEffect(() {

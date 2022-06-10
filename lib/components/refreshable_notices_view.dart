@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/components/list_item.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
+import 'package:refugee_help_board_frontend/stores/user_store.dart';
 
 part 'refreshable_notices_view.g.dart';
 
@@ -29,8 +30,9 @@ Widget refreshableNoticesView(
         ),
         child: ListView.separated(
           itemCount: notices.length,
-          itemBuilder: (context, index) =>
-              ListItem(notice: notices[notices.length - 1 - index]),
+          itemBuilder: (context, index) => ListItem(
+              notice: notices[notices.length - 1 - index],
+              onRefresh: onRefresh),
           separatorBuilder: (context, index) => const Divider(),
         ),
       ),

@@ -7,9 +7,12 @@ part of 'profile_notices_list_view.dart';
 // **************************************************************************
 
 class ProfileNoticesListView extends HookConsumerWidget {
-  const ProfileNoticesListView({Key? key}) : super(key: key);
+  const ProfileNoticesListView({Key? key, required this.setOnRefresh})
+      : super(key: key);
+
+  final ValueNotifier<Future<void> Function()?> setOnRefresh;
 
   @override
   Widget build(BuildContext _context, WidgetRef _ref) =>
-      profileNoticesListView(_context, _ref);
+      profileNoticesListView(_context, _ref, setOnRefresh: setOnRefresh);
 }

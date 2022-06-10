@@ -85,6 +85,22 @@ class NoticeService extends StateNotifier<void> {
       return HttpResult.failure(PostFailures.systemError);
     }
   }
+
+  Future<HttpResult<void, PostFailures>> close(Notice notice) async {
+    try {
+      final response = await ref
+          .read(httpClient)
+          .patch(serverAddress("/notice/close/${notice.id!}"));
+
+      if (response.statusCode == 200) {
+        return HttpResult.success(null);
+      } else {
+        return HttpResult.failure(PostFailures.systemError);
+      }
+    } catch (error) {
+      return HttpResult.failure(PostFailures.systemError);
+    }
+  }
 }
 
 final noticeApiProvider = StateNotifierProvider((ref) => NoticeService(ref));

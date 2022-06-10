@@ -11,8 +11,8 @@ part "login_view.g.dart";
 Widget loginView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
-  final loginController = useTextEditingController();
-  final passwordController = useTextEditingController();
+  final loginController = useTextEditingController(text: "");
+  final passwordController = useTextEditingController(text: "");
 
   final isLoading = useState(false);
 

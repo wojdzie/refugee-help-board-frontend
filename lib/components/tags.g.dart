@@ -108,3 +108,10 @@ class FilterAccomodationTag extends StatelessWidget {
   Widget build(BuildContext _context) =>
       filterAccomodationTag(selected: selected, onSelected: onSelected);
 }
+
+class CompletedTag extends StatelessWidget {
+  const CompletedTag({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext _context) => completedTag();
+}

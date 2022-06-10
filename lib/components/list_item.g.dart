@@ -6,11 +6,15 @@ part of 'list_item.dart';
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class ListItem extends StatelessWidget {
-  const ListItem({Key? key, required this.notice}) : super(key: key);
+class ListItem extends HookConsumerWidget {
+  const ListItem({Key? key, required this.notice, required this.onRefresh})
+      : super(key: key);
 
   final Notice notice;
 
+  final Future<void> Function() onRefresh;
+
   @override
-  Widget build(BuildContext _context) => listItem(notice: notice);
+  Widget build(BuildContext _context, WidgetRef _ref) =>
+      listItem(_ref, notice: notice, onRefresh: onRefresh);
 }

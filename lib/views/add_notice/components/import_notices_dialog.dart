@@ -4,14 +4,12 @@ import 'package:csv/csv.dart';
 import 'package:csv/csv_settings_autodetection.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/utils/storage.dart';
 import 'package:refugee_help_board_frontend/views/add_notice/add_notice_view.dart';
-import 'package:tuple/tuple.dart';
 
 part "import_notices_dialog.g.dart";
 
@@ -61,11 +59,7 @@ Widget importNoticesDialog(BuildContext context,
       TextButton(
           onPressed: () async {
             try {
-              var result = await FilePicker.platform.pickFiles();
-
-              if (result != null) {
-                print(result.files.single.path);
-              }
+              await FilePicker.platform.pickFiles();
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

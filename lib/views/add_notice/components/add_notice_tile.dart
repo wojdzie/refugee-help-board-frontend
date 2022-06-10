@@ -41,16 +41,9 @@ Widget addNoticeTile(
           description: descriptionController.text,
           type: selectedType.value,
           tags: selectedFilters.value)),
-      [descriptionController.text, selectedType.value, selectedFilters.value]);
+      [description, selectedType.value, selectedFilters.value]);
 
   useEffect(() {
-    print("change");
-
-    return null;
-  }, [description, selectedType.value, selectedFilters.value]);
-
-  useEffect(() {
-    print("Update");
     descriptionController.text = data.description;
     selectedType.value = data.type;
     selectedFilters.value = data.tags;

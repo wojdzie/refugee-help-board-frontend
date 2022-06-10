@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:refugee_help_board_frontend/schemas/user/user_schema.dart';
 import 'package:refugee_help_board_frontend/services/user_service.dart';
 
@@ -16,17 +15,6 @@ Widget loginView(BuildContext ctx, WidgetRef ref) {
   final passwordController = useTextEditingController();
 
   final isLoading = useState(false);
-
-  useEffect(() {
-    doStuff() async {
-      print((await getApplicationDocumentsDirectory()).path);
-      print((await getApplicationSupportDirectory()).path);
-      print((await getExternalStorageDirectory())!.path);
-      print((await getTemporaryDirectory()).path);
-    }
-
-    doStuff();
-  }, []);
 
   return Scaffold(
       appBar: AppBar(title: const Text("Login")),

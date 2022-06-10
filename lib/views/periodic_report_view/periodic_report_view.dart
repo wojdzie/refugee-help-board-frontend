@@ -24,6 +24,8 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
     } else {
       fromController.text = fromDate.value.toString().split(" ").first;
     }
+
+    return null;
   }, [fromDate.value]);
 
   useEffect(() {
@@ -32,6 +34,8 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
     } else {
       toController.text = toDate.value.toString().split(" ").first;
     }
+
+    return null;
   }, [toDate.value]);
 
   return Scaffold(
@@ -106,6 +110,19 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
                                   ScaffoldMessenger.of(ctx)
                                       .hideCurrentSnackBar();
                                   isLoading.value = false;
+
+                                  if (result.isSuccess) {
+                                    ScaffoldMessenger.of(ctx).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Report saved successfully')),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(ctx).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('System error')),
+                                    );
+                                  }
                                 }
                               },
                         child: isLoading.value

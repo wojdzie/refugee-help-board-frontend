@@ -7,7 +7,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/utils/storage.dart';
-import 'package:refugee_help_board_frontend/views/app/components/notices_list_view.dart';
 
 part "export_notices_dialog.g.dart";
 
@@ -46,8 +45,6 @@ Widget exportNoticesDialog(BuildContext context,
             if (exportOptions[exportType.value] == "json") {
               var json =
                   jsonEncode(notices.map((notice) => notice.toJson()).toList());
-
-              print(notices);
 
               await saveStorage.writeFile(filenameController.text, json,
                   exportOptions[exportType.value]);

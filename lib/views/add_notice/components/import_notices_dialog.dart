@@ -77,6 +77,13 @@ Widget importNoticesDialog(BuildContext context,
 
                   var state = <NoticeField<int, Notice>>[];
 
+                  List<String> parseArray(String data) {
+                    return data
+                        .substring(1, data.length - 1)
+                        .replaceAll(" ", "")
+                        .split(",");
+                  }
+
                   if (type == "json") {
                     final notices = jsonDecode(
                             await saveStorage.readFile(selectedFile.value!))
@@ -95,13 +102,6 @@ Widget importNoticesDialog(BuildContext context,
                         .convert(
                             await saveStorage.readFile(selectedFile.value!));
 
-                    List<String> parseArray(String csv) {
-                      return csv
-                          .substring(1, csv.length - 1)
-                          .replaceAll(" ", "")
-                          .split(",");
-                    }
-
                     for (int i = 1; i < notices.length; i++) {
                       state.add(NoticeField(
                           i - 1,
@@ -114,13 +114,6 @@ Widget importNoticesDialog(BuildContext context,
                   } else if (type == "xlsx") {
                     final excel = Excel.decodeBytes(
                         await saveStorage.readFileAsBytes(selectedFile.value!));
-
-                    List<String> parseArray(String csv) {
-                      return csv
-                          .substring(1, csv.length - 1)
-                          .replaceAll(" ", "")
-                          .split(",");
-                    }
 
                     final sheet = excel.sheets.values.first;
 

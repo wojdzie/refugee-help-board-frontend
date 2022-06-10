@@ -20,7 +20,7 @@ void main() {
 }
 
 @swidget
-Widget myApp(BuildContext ctx) => MaterialApp(
+Widget myApp(BuildContext context) => MaterialApp(
         title: "Refugee App",
         theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
         routes: {

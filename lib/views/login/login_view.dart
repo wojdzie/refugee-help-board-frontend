@@ -8,7 +8,7 @@ import 'package:refugee_help_board_frontend/services/user_service.dart';
 part "login_view.g.dart";
 
 @hcwidget
-Widget loginView(BuildContext ctx, WidgetRef ref) {
+Widget loginView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
   final loginController = useTextEditingController();
@@ -58,7 +58,7 @@ Widget loginView(BuildContext ctx, WidgetRef ref) {
                             ? null
                             : () async {
                                 if (key.currentState!.validate()) {
-                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                  ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text('Please wait...')),
                                   );
@@ -73,15 +73,16 @@ Widget loginView(BuildContext ctx, WidgetRef ref) {
                                       .read(userApiProvider.notifier)
                                       .login(user);
 
-                                  ScaffoldMessenger.of(ctx)
+                                  ScaffoldMessenger.of(context)
                                       .hideCurrentSnackBar();
                                   isLoading.value = false;
 
                                   if (result.isSuccess) {
-                                    Navigator.of(ctx).pushNamedAndRemoveUntil(
-                                        "/app", (_) => false);
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            "/app", (_) => false);
                                   } else {
-                                    ScaffoldMessenger.of(ctx).showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content:
                                               Text(result.error.toString())),

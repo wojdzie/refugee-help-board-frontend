@@ -35,7 +35,7 @@ class LandingClipper extends CustomClipper<Path> {
 }
 
 @swidget
-Widget landingView(BuildContext ctx) => Scaffold(
+Widget landingView(BuildContext context) => Scaffold(
     backgroundColor: Colors.blue,
     body: Center(
         child: Column(
@@ -53,13 +53,13 @@ Widget landingView(BuildContext ctx) => Scaffold(
                       children: [
                     Text(
                       "Thank you for help",
-                      style: Theme.of(ctx).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline4,
                     ),
                     const SizedBox(height: 64),
                     TextButton(
                       child: Text("See how community is helping",
-                          style: Theme.of(ctx).textTheme.headline6),
-                      onPressed: () => Navigator.pushNamed(ctx, "/report"),
+                          style: Theme.of(context).textTheme.headline6),
+                      onPressed: () => Navigator.pushNamed(context, "/report"),
                     ),
                   ])),
             ),

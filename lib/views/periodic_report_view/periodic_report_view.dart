@@ -7,7 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 part "periodic_report_view.g.dart";
 
 @hcwidget
-Widget periodicReport(BuildContext ctx, WidgetRef ref) {
+Widget periodicReport(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
   final fromController = useTextEditingController();
@@ -55,7 +55,7 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
                       ),
                       onTap: () {
                         showDatePicker(
-                                context: ctx,
+                                context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime(2022),
                                 lastDate: DateTime(2023))
@@ -75,7 +75,7 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
                       ),
                       onTap: () {
                         showDatePicker(
-                                context: ctx,
+                                context: context,
                                 initialDate: DateTime.now(),
                                 firstDate: DateTime(2022),
                                 lastDate: DateTime(2023))
@@ -95,7 +95,7 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
                             ? null
                             : () async {
                                 if (key.currentState!.validate()) {
-                                  ScaffoldMessenger.of(ctx).showSnackBar(
+                                  ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text('Please wait...')),
                                   );
@@ -107,18 +107,18 @@ Widget periodicReport(BuildContext ctx, WidgetRef ref) {
                                       .fetchPeriodic(
                                           fromDate.value, toDate.value);
 
-                                  ScaffoldMessenger.of(ctx)
+                                  ScaffoldMessenger.of(context)
                                       .hideCurrentSnackBar();
                                   isLoading.value = false;
 
                                   if (result.isSuccess) {
-                                    ScaffoldMessenger.of(ctx).showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
                                               'Report saved successfully')),
                                     );
                                   } else {
-                                    ScaffoldMessenger.of(ctx).showSnackBar(
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text('System error')),
                                     );

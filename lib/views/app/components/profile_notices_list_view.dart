@@ -7,14 +7,14 @@ import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
-part 'notices_list_view.g.dart';
+part 'profile_notices_list_view.g.dart';
 
 @hcwidget
-Widget noticesListView(BuildContext context, WidgetRef ref) {
+Widget profileNoticesListView(BuildContext context, WidgetRef ref) {
   final notices = useState<List<Notice>?>(null);
 
   final onRefresh = useCallback(() async {
-    final result = await ref.read(noticeApiProvider.notifier).fetchAll();
+    final result = await ref.read(noticeApiProvider.notifier).fetchPersonal();
 
     if (result.isSuccess) {
       notices.value = result.data;

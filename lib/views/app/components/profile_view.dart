@@ -9,7 +9,7 @@ import 'package:refugee_help_board_frontend/stores/user_store.dart';
 part 'profile_view.g.dart';
 
 @hcwidget
-Widget profileView(BuildContext ctx, WidgetRef ref) {
+Widget profileView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
   final user = ref.watch(userProvider);
 
@@ -52,7 +52,7 @@ Widget profileView(BuildContext ctx, WidgetRef ref) {
                 onPressed: isLoading.value
                     ? null
                     : () async {
-                        ScaffoldMessenger.of(ctx).showSnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Please wait...')),
                         );
 
@@ -67,15 +67,15 @@ Widget profileView(BuildContext ctx, WidgetRef ref) {
                             .read(userApiProvider.notifier)
                             .register(user);
 
-                        ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                         isLoading.value = false;
 
                         if (result.isSuccess) {
-                          Navigator.of(ctx)
+                          Navigator.of(context)
                               .pushNamedAndRemoveUntil("/app", (_) => false);
                         } else {
-                          ScaffoldMessenger.of(ctx).showSnackBar(
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(result.error.toString())),
                           );
                         }

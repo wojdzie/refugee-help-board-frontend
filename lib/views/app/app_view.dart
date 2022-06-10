@@ -50,6 +50,7 @@ Widget appView(BuildContext context, WidgetRef ref) {
           selected: currentPage.value == AppPages.noticesList,
           onTap: () {
             currentPage.value = AppPages.noticesList;
+            Navigator.of(context).pop();
           },
         ),
         ListTile(
@@ -58,6 +59,7 @@ Widget appView(BuildContext context, WidgetRef ref) {
           selected: currentPage.value == AppPages.profile,
           onTap: () {
             currentPage.value = AppPages.profile;
+            Navigator.of(context).pop();
           },
         ),
         Expanded(flex: 1, child: Container()),

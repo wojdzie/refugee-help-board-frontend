@@ -35,9 +35,7 @@ Widget findNoticeView(BuildContext context, WidgetRef ref) {
   }, []);
 
   useEffect(() {
-    ref
-        .read(noticeApiProvider.notifier)
-        .fetchFiltered(selectedType.value, selectedFilters.value);
+    onRefresh();
 
     return null;
   }, [selectedType.value, selectedFilters.value]);

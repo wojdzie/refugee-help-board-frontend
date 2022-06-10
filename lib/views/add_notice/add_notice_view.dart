@@ -5,41 +5,44 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
-import 'package:refugee_help_board_frontend/views/add_notice/add_notice_tile.dart';
-import 'package:tuple/tuple.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/components/add_notice_tile.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/components/export_notices_dialog.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/components/import_notices_dialog.dart';
 
 part "add_notice_view.g.dart";
 
-const baseNotice = Notice(description: "", tags: [], type: "XD");
+const baseNotice = Notice(description: "", tags: [], type: requestType);
+
+class NoticeField<L, R> {
+  L id;
+  R notice;
+
+  NoticeField(this.id, this.notice);
+}
 
 @hcwidget
-Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
+Widget addNoticeView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
-  final selectedType = useState(requestType);
-  final selectedFilters = useState(<String>[]);
-
   final nextId = useState(1);
-  final noticesFormsData = useState([Tuple2(0, baseNotice.copyWith())]);
+  final noticesFormsData = useState([NoticeField(0, baseNotice.copyWith())]);
 
   final noticesWidgets = useMemoized(
       () => noticesFormsData.value.asMap().entries.map((entry) => AddNoticeTile(
-            key: Key(entry.value.item1.toString()),
+            key: Key(entry.value.id.toString()),
             count: entry.key + 1,
+            data: entry.value.notice,
             onChange: (notice) {
-              var idx = noticesFormsData.value
-                  .indexWhere((tuple) => tuple.item1 == entry.value.item1);
+              var tuple = noticesFormsData.value
+                  .firstWhere((tuple) => tuple.id == entry.value.id);
 
-              noticesFormsData.value
-                ..removeAt(idx)
-                ..insert(idx, Tuple2(entry.value.item1, notice));
+              tuple.notice = notice;
             },
             onRemove: noticesFormsData.value.length != 1
                 ? () {
                     noticesFormsData.value = [
                       ...noticesFormsData.value
-                        ..removeWhere(
-                            (value) => value.item1 == entry.value.item1)
+                        ..removeWhere((value) => value.id == entry.value.id)
                     ];
                   }
                 : null,
@@ -50,16 +53,16 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
 
   final submitFunction = useCallback(() async {
     if (key.currentState!.validate()) {
-      ScaffoldMessenger.of(ctx).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Adding notice(s)...')),
       );
 
       isLoading.value = true;
 
       final results = await Future.wait(noticesFormsData.value.map(
-          (tuple) => ref.read(noticeApiProvider.notifier).post(tuple.item2)));
+          (tuple) => ref.read(noticeApiProvider.notifier).post(tuple.notice)));
 
-      ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       isLoading.value = false;
 
@@ -67,13 +70,13 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
           !results.map((result) => result.isSuccess).any((element) => false);
 
       if (isSuccess) {
-        Navigator.of(ctx).pop();
+        Navigator.of(context).pop();
       } else {
         var errors = results
             .where((result) => !result.isSuccess)
             .map((failure) => failure.error)
             .map((error) => error.toString());
-        ScaffoldMessenger.of(ctx).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(errors.toString())),
         );
       }
@@ -97,7 +100,7 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
                   onPressed: () {
                     noticesFormsData.value = [
                       ...noticesFormsData.value,
-                      Tuple2(nextId.value, baseNotice.copyWith())
+                      NoticeField(nextId.value, baseNotice.copyWith())
                     ];
                     nextId.value++;
                   },
@@ -117,7 +120,15 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
           ElevatedButton.icon(
             icon: const Icon(Icons.restore),
             label: const Text("Restore"),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => ImportNoticesDialog(
+                        onImport: (state) {
+                          noticesFormsData.value = state;
+                        },
+                      ));
+            },
           ),
           const SizedBox(
             width: 12,
@@ -125,7 +136,14 @@ Widget addNoticeView(BuildContext ctx, WidgetRef ref) {
           ElevatedButton.icon(
             icon: const Icon(Icons.save),
             label: const Text("Save"),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) => ExportNoticesDialog(
+                      notices: noticesFormsData.value
+                          .map((noticeForms) => noticeForms.notice)
+                          .toList()));
+            },
           ),
           const Spacer(),
           ElevatedButton(

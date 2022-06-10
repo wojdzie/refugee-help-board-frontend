@@ -1,43 +1,48 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/views/add_notice/components/add_notice_tile.dart';
 import 'package:refugee_help_board_frontend/views/add_notice/components/export_notices_dialog.dart';
-import 'package:tuple/tuple.dart';
+import 'package:refugee_help_board_frontend/views/add_notice/components/import_notices_dialog.dart';
 
 part "add_notice_view.g.dart";
 
-const baseNotice = Notice(description: "", tags: [], type: "XD");
+const baseNotice = Notice(description: "", tags: [], type: requestType);
+
+class NoticeField<L, R> {
+  L id;
+  R notice;
+
+  NoticeField(this.id, this.notice);
+}
 
 @hcwidget
 Widget addNoticeView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
 
   final nextId = useState(1);
-  final noticesFormsData = useState([Tuple2(0, baseNotice.copyWith())]);
+  final noticesFormsData = useState([NoticeField(0, baseNotice.copyWith())]);
 
   final noticesWidgets = useMemoized(
       () => noticesFormsData.value.asMap().entries.map((entry) => AddNoticeTile(
-            key: Key(entry.value.item1.toString()),
+            key: Key(entry.value.id.toString()),
             count: entry.key + 1,
+            data: entry.value.notice,
             onChange: (notice) {
-              var idx = noticesFormsData.value
-                  .indexWhere((tuple) => tuple.item1 == entry.value.item1);
+              var tuple = noticesFormsData.value
+                  .firstWhere((tuple) => tuple.id == entry.value.id);
 
-              noticesFormsData.value
-                ..removeAt(idx)
-                ..insert(idx, Tuple2(entry.value.item1, notice));
+              tuple.notice = notice;
             },
             onRemove: noticesFormsData.value.length != 1
                 ? () {
                     noticesFormsData.value = [
                       ...noticesFormsData.value
-                        ..removeWhere(
-                            (value) => value.item1 == entry.value.item1)
+                        ..removeWhere((value) => value.id == entry.value.id)
                     ];
                   }
                 : null,
@@ -55,7 +60,7 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
       isLoading.value = true;
 
       final results = await Future.wait(noticesFormsData.value.map(
-          (tuple) => ref.read(noticeApiProvider.notifier).post(tuple.item2)));
+          (tuple) => ref.read(noticeApiProvider.notifier).post(tuple.notice)));
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
@@ -95,7 +100,7 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
                   onPressed: () {
                     noticesFormsData.value = [
                       ...noticesFormsData.value,
-                      Tuple2(nextId.value, baseNotice.copyWith())
+                      NoticeField(nextId.value, baseNotice.copyWith())
                     ];
                     nextId.value++;
                   },
@@ -118,36 +123,10 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
             onPressed: () {
               showDialog(
                   context: context,
-                  builder: (_) => AlertDialog(
-                        title: const Text("Restore"),
-                        content: const Text(
-                            "Warning: Restoration from file will destroy your data. Do you want to proceed?"),
-                        actions: [
-                          TextButton(
-                              onPressed: () async {
-                                try {
-                                  var result =
-                                      await FilePicker.platform.pickFiles();
-
-                                  if (result != null) {
-                                    print(result.files.single.path);
-                                  }
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "This operating system doesn't support restoration feature")),
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: const Text("Yes")),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text("No")),
-                        ],
+                  builder: (_) => ImportNoticesDialog(
+                        onImport: (state) {
+                          noticesFormsData.value = state;
+                        },
                       ));
             },
           ),
@@ -162,7 +141,7 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
                   context: context,
                   builder: (_) => ExportNoticesDialog(
                       notices: noticesFormsData.value
-                          .map((noticeForms) => noticeForms.item2)
+                          .map((noticeForms) => noticeForms.notice)
                           .toList()));
             },
           ),

@@ -17,7 +17,7 @@ const exportOptions = ["json", "csv", "xlsx"];
 Widget exportNoticesDialog(BuildContext context,
     {required List<Notice> notices}) {
   final filenameController = useTextEditingController();
-  final saveStorage = Storage(directory: "drafts");
+  final saveStorage = useMemoized(() => Storage(directory: "drafts"));
 
   final exportType = useState(0);
 

@@ -17,16 +17,22 @@ class NumberedDivider extends StatelessWidget {
 
 class AddNoticeTile extends HookWidget {
   const AddNoticeTile(
-      {Key? key, required this.count, required this.onChange, this.onRemove})
+      {Key? key,
+      required this.count,
+      required this.data,
+      required this.onChange,
+      this.onRemove})
       : super(key: key);
 
   final int count;
+
+  final Notice data;
 
   final void Function(Notice) onChange;
 
   final void Function()? onRemove;
 
   @override
-  Widget build(BuildContext _context) =>
-      addNoticeTile(count: count, onChange: onChange, onRemove: onRemove);
+  Widget build(BuildContext _context) => addNoticeTile(
+      count: count, data: data, onChange: onChange, onRemove: onRemove);
 }

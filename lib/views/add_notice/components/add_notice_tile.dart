@@ -27,6 +27,7 @@ Widget numberedDivider({required num id}) => Row(children: [
 @hwidget
 Widget addNoticeTile(
     {required int count,
+    required Notice data,
     required void Function(Notice) onChange,
     void Function()? onRemove}) {
   final descriptionController = useTextEditingController();
@@ -35,14 +36,27 @@ Widget addNoticeTile(
   final selectedFilters = useState(<String>[]);
   final description = useValueListenable(descriptionController);
 
+  final updateFields = useCallback(
+      () => onChange(Notice(
+          description: descriptionController.text,
+          type: selectedType.value,
+          tags: selectedFilters.value)),
+      [descriptionController.text, selectedType.value, selectedFilters.value]);
+
   useEffect(() {
-    onChange(Notice(
-        description: descriptionController.text,
-        type: selectedType.value,
-        tags: selectedFilters.value));
+    print("change");
 
     return null;
   }, [description, selectedType.value, selectedFilters.value]);
+
+  useEffect(() {
+    print("Update");
+    descriptionController.text = data.description;
+    selectedType.value = data.type;
+    selectedFilters.value = data.tags;
+
+    return null;
+  }, [data]);
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,6 +65,9 @@ Widget addNoticeTile(
       NumberedDivider(id: count),
       TextFormField(
         controller: descriptionController,
+        onChanged: (value) {
+          updateFields();
+        },
         maxLines: null,
         keyboardType: TextInputType.multiline,
         decoration: const InputDecoration(
@@ -72,12 +89,14 @@ Widget addNoticeTile(
               selected: selectedType.value == requestType,
               onSelected: (bool selected) {
                 selectedType.value = requestType;
+                updateFields();
               }),
           const SizedBox(width: 12),
           ChoiceOfferTag(
               selected: selectedType.value == offerType,
               onSelected: (bool selected) {
                 selectedType.value = offerType;
+                updateFields();
               }),
         ],
       ),
@@ -99,6 +118,7 @@ Widget addNoticeTile(
                       .where((filter) => filter != accomodationLabel)
                       .toList();
                 }
+                updateFields();
               }),
           const SizedBox(width: 12),
           FilterFoodTag(
@@ -111,6 +131,7 @@ Widget addNoticeTile(
                       .where((filter) => filter != foodLabel)
                       .toList();
                 }
+                updateFields();
               }),
           const SizedBox(width: 12),
           FilterLawTag(

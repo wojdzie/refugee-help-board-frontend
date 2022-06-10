@@ -1,20 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'list_item.dart';
+part of 'profile_notices_list_view.dart';
 
 // **************************************************************************
 // FunctionalWidgetGenerator
 // **************************************************************************
 
-class ListItem extends HookConsumerWidget {
-  const ListItem({Key? key, required this.notice, required this.onRefresh})
+class ProfileNoticesListView extends HookConsumerWidget {
+  const ProfileNoticesListView({Key? key, required this.setOnRefresh})
       : super(key: key);
 
-  final Notice notice;
-
-  final Future<void> Function() onRefresh;
+  final ValueNotifier<Future<void> Function()?> setOnRefresh;
 
   @override
   Widget build(BuildContext _context, WidgetRef _ref) =>
-      listItem(_ref, notice: notice, onRefresh: onRefresh);
+      profileNoticesListView(_context, _ref, setOnRefresh: setOnRefresh);
 }

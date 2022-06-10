@@ -80,14 +80,14 @@ Widget addNoticeTile(
         children: [
           ChoiceRequestTag(
               selected: selectedType.value == requestType,
-              onSelected: (bool selected) {
+              onSelected: (_) {
                 selectedType.value = requestType;
                 updateFields();
               }),
           const SizedBox(width: 12),
           ChoiceOfferTag(
               selected: selectedType.value == offerType,
-              onSelected: (bool selected) {
+              onSelected: (_) {
                 selectedType.value = offerType;
                 updateFields();
               }),

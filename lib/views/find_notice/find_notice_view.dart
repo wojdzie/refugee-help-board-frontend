@@ -7,22 +7,35 @@ import 'package:refugee_help_board_frontend/components/refreshable_notices_view.
 import 'package:refugee_help_board_frontend/constants/notice.dart';
 import 'package:refugee_help_board_frontend/constants/tags.dart';
 import 'package:refugee_help_board_frontend/extenstions/string.dart';
+import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/stores/notice_store.dart';
 
 part "find_notice_view.g.dart";
 
 @hcwidget
-Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
-  final filteredNotices = ref.watch(filteredNoticesProvider);
+Widget findNoticeView(BuildContext context, WidgetRef ref) {
+  final notices = useState<List<Notice>?>(null);
 
   final selectedType = useState(requestType);
   final selectedFilters = useState(<String>[]);
 
-  useEffect(() {
-    ref
+  final onRefresh = useCallback(() async {
+    final result = await ref
         .read(noticeApiProvider.notifier)
         .fetchFiltered(selectedType.value, selectedFilters.value);
+
+    if (result.isSuccess) {
+      notices.value = result.data;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Problem with fetching notices')),
+      );
+    }
+  }, []);
+
+  useEffect(() {
+    onRefresh();
 
     return null;
   }, [selectedType.value, selectedFilters.value]);
@@ -47,7 +60,7 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
           leading: IconButton(
               color: Colors.white,
               onPressed: () {
-                Navigator.of(ctx).pop();
+                Navigator.of(context).pop();
               },
               icon: const Icon(Icons.arrow_back)),
           actions: const [
@@ -55,8 +68,8 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
           ],
         ),
         subHeader: BackdropSubHeader(
-            title: Text(filteredNotices != null
-                ? "See ${filteredNotices.length} results"
+            title: Text(notices.value != null
+                ? "See ${notices.value!.length} results"
                 : "See results")),
         backLayer: ListView(children: [
           const ListTile(title: Text("Notice type:")),
@@ -149,7 +162,8 @@ Widget findNoticeView(BuildContext ctx, WidgetRef ref) {
           debugShowCheckedModeBanner: false,
           home: Center(
               child: RefreshableNoticesView(
-            notices: filteredNotices,
+            notices: notices.value,
+            onRefresh: onRefresh,
           )),
         ),
       ));

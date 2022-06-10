@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/constants/notice.dart';
+import 'package:refugee_help_board_frontend/schemas/arguments/add_notice_arguments.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
 import 'package:refugee_help_board_frontend/views/add_notice/components/add_notice_tile.dart';
@@ -23,6 +24,9 @@ class NoticeField<L, R> {
 @hcwidget
 Widget addNoticeView(BuildContext context, WidgetRef ref) {
   final key = useMemoized(() => GlobalKey<FormState>());
+
+  final arguments =
+      ModalRoute.of(context)!.settings.arguments as AddNoticeArguments;
 
   final nextId = useState(1);
   final noticesFormsData = useState([NoticeField(0, baseNotice.copyWith())]);
@@ -70,6 +74,7 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
           !results.map((result) => result.isSuccess).any((element) => false);
 
       if (isSuccess) {
+        arguments.onRefresh();
         Navigator.of(context).pop();
       } else {
         var errors = results
@@ -95,8 +100,9 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
               const Divider(),
               Align(
                 alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  child: const Text("Add next notice"),
+                child: ElevatedButton.icon(
+                  icon: const Icon(Icons.add),
+                  label: const Text("Add next notice"),
                   onPressed: () {
                     noticesFormsData.value = [
                       ...noticesFormsData.value,
@@ -146,9 +152,10 @@ Widget addNoticeView(BuildContext context, WidgetRef ref) {
             },
           ),
           const Spacer(),
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: isLoading.value ? null : submitFunction,
-            child: isLoading.value
+            icon: const Icon(Icons.post_add),
+            label: isLoading.value
                 ? const SizedBox(
                     height: 20,
                     width: 20,

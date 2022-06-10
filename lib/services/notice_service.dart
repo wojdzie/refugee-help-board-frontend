@@ -15,7 +15,7 @@ class NoticeService extends StateNotifier<void> {
 
   final Ref ref;
 
-  Future<HttpResult<void, FetchFailures>> fetch() async {
+  Future<HttpResult<List<Notice>, FetchFailures>> fetchAll() async {
     try {
       final response = await ref.read(httpClient).get(serverAddress("/notice"));
 
@@ -23,11 +23,7 @@ class NoticeService extends StateNotifier<void> {
         final iterable =
             jsonDecode(response.body).map((notice) => Notice.fromJson(notice));
 
-        ref
-            .read(noticesProvider.notifier)
-            .update((state) => List<Notice>.from(iterable));
-
-        return HttpResult.success(null);
+        return HttpResult.success(List<Notice>.from(iterable));
       } else {
         return HttpResult.failure(FetchFailures.systemError);
       }
@@ -36,7 +32,26 @@ class NoticeService extends StateNotifier<void> {
     }
   }
 
-  Future<HttpResult<void, FetchFailures>> fetchFiltered(
+  Future<HttpResult<List<Notice>, FetchFailures>> fetchPersonal() async {
+    try {
+      final response = await ref
+          .read(httpClient)
+          .get(serverAddress("/filter/filterPersonal"));
+
+      if (response.statusCode == 200) {
+        final iterable =
+            jsonDecode(response.body).map((notice) => Notice.fromJson(notice));
+
+        return HttpResult.success(List<Notice>.from(iterable));
+      } else {
+        return HttpResult.failure(FetchFailures.systemError);
+      }
+    } catch (error) {
+      return HttpResult.failure(FetchFailures.systemError);
+    }
+  }
+
+  Future<HttpResult<List<Notice>, FetchFailures>> fetchFiltered(
       String type, List<String> tags) async {
     try {
       final response = await ref.read(httpClient).get(
@@ -46,11 +61,7 @@ class NoticeService extends StateNotifier<void> {
         final iterable =
             jsonDecode(response.body).map((notice) => Notice.fromJson(notice));
 
-        ref
-            .read(filteredNoticesProvider.notifier)
-            .update((state) => List<Notice>.from(iterable));
-
-        return HttpResult.success(null);
+        return HttpResult.success(List<Notice>.from(iterable));
       } else {
         return HttpResult.failure(FetchFailures.systemError);
       }
@@ -64,6 +75,22 @@ class NoticeService extends StateNotifier<void> {
       final response = await ref
           .read(httpClient)
           .post(serverAddress("/notice"), body: jsonEncode(notice.toJson()));
+
+      if (response.statusCode == 200) {
+        return HttpResult.success(null);
+      } else {
+        return HttpResult.failure(PostFailures.systemError);
+      }
+    } catch (error) {
+      return HttpResult.failure(PostFailures.systemError);
+    }
+  }
+
+  Future<HttpResult<void, PostFailures>> close(Notice notice) async {
+    try {
+      final response = await ref
+          .read(httpClient)
+          .patch(serverAddress("/notice/close/${notice.id!}"));
 
       if (response.statusCode == 200) {
         return HttpResult.success(null);

@@ -4,7 +4,7 @@ import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 part 'landing_button.g.dart';
 
 @swidget
-Widget landingButton(BuildContext ctx,
+Widget landingButton(BuildContext context,
         {required String label,
         required String route,
         required IconData icon}) =>
@@ -16,5 +16,5 @@ Widget landingButton(BuildContext ctx,
                   MaterialStateProperty.all(const Size(double.infinity, 48))),
           label: Text(label),
           icon: Icon(icon),
-          onPressed: () => Navigator.pushNamed(ctx, route),
+          onPressed: () => Navigator.pushNamed(context, route),
         ));

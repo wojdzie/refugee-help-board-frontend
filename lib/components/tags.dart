@@ -111,3 +111,14 @@ Widget filterAccomodationTag(
       selected: selected,
       onSelected: onSelected,
     );
+
+@swidget
+Widget completedTag() => const Chip(
+      avatar: Icon(
+        Icons.check,
+        size: 16,
+        color: Colors.white,
+      ),
+      label: Text("completed", style: TextStyle(color: Colors.white)),
+      backgroundColor: Colors.green,
+    );

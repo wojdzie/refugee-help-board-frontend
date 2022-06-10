@@ -6,7 +6,7 @@ import 'package:refugee_help_board_frontend/services/report_service.dart';
 part "report_view.g.dart";
 
 @hcwidget
-Widget reportView(BuildContext ctx, WidgetRef ref) => Scaffold(
+Widget reportView(BuildContext context, WidgetRef ref) => Scaffold(
     appBar: AppBar(title: const Text("Generate reports")),
     body: Center(
       child: Column(
@@ -20,7 +20,7 @@ Widget reportView(BuildContext ctx, WidgetRef ref) => Scaffold(
           ),
           ElevatedButton(
             child: const Text("Periodic report"),
-            onPressed: () => Navigator.pushNamed(ctx, "/periodic-report"),
+            onPressed: () => Navigator.pushNamed(context, "/periodic-report"),
           ),
         ],
       ),

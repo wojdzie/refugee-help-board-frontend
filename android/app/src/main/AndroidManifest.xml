@@ -6,6 +6,7 @@
             <data android:mimeType="vnd.android.cursor.item/event" />
         </intent>
     </queries>
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="refugee_help_board_frontend"
         android:name="${applicationName}"

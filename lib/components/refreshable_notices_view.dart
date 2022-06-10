@@ -5,12 +5,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:refugee_help_board_frontend/components/list_item.dart';
 import 'package:refugee_help_board_frontend/schemas/notice/notice_schema.dart';
 import 'package:refugee_help_board_frontend/services/notice_service.dart';
+import 'package:refugee_help_board_frontend/stores/user_store.dart';
 
 part 'refreshable_notices_view.g.dart';
 
 @cwidget
-Widget refreshableNoticesView(BuildContext context, WidgetRef ref,
-    {List<Notice>? notices}) {
+Widget refreshableNoticesView(
+  BuildContext context,
+  WidgetRef ref, {
+  List<Notice>? notices,
+  required Future<void> Function() onRefresh,
+}) {
   if (notices == null) {
     return const CircularProgressIndicator();
   }
@@ -25,10 +30,11 @@ Widget refreshableNoticesView(BuildContext context, WidgetRef ref,
         ),
         child: ListView.separated(
           itemCount: notices.length,
-          itemBuilder: (ctx, index) =>
-              ListItem(notice: notices[notices.length - 1 - index]),
-          separatorBuilder: (ctx, index) => const Divider(),
+          itemBuilder: (context, index) => ListItem(
+              notice: notices[notices.length - 1 - index],
+              onRefresh: onRefresh),
+          separatorBuilder: (context, index) => const Divider(),
         ),
       ),
-      onRefresh: () => ref.read(noticeApiProvider.notifier).fetch());
+      onRefresh: onRefresh);
 }

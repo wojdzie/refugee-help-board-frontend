@@ -15,8 +15,6 @@ Widget refreshableNoticesView(BuildContext context, WidgetRef ref,
     return const CircularProgressIndicator();
   }
 
-  print(notices);
-
   return RefreshIndicator(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(

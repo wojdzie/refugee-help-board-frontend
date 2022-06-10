@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:csv/csv.dart';
+import 'package:csv/csv_settings_autodetection.dart';
+import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,15 +79,13 @@ Widget importNoticesDialog(BuildContext context,
       TextButton(
           onPressed: selectedFile.value != null
               ? () async {
-                  final content =
-                      await saveStorage.readFile(selectedFile.value!);
-
                   final type = selectedFile.value!.split(".").last;
 
                   var state = <NoticeField<int, Notice>>[];
 
                   if (type == "json") {
-                    final notices = jsonDecode(content)
+                    final notices = jsonDecode(
+                            await saveStorage.readFile(selectedFile.value!))
                         .map((notice) => Notice.fromJson(notice));
 
                     state = List<Notice>.from(notices)
@@ -93,7 +94,52 @@ Widget importNoticesDialog(BuildContext context,
                         .map((entry) => NoticeField(entry.key, entry.value))
                         .toList();
                   } else if (type == "csv") {
-                  } else if (type == "xlsx") {}
+                    const detector = FirstOccurrenceSettingsDetector(
+                        eols: ['\r\n', '\n'], textDelimiters: ['"', "'"]);
+                    final notices = const CsvToListConverter(
+                            csvSettingsDetector: detector)
+                        .convert(
+                            await saveStorage.readFile(selectedFile.value!));
+
+                    List<String> parseArray(String csv) {
+                      return csv
+                          .substring(1, csv.length - 1)
+                          .replaceAll(" ", "")
+                          .split(",");
+                    }
+
+                    for (int i = 1; i < notices.length; i++) {
+                      state.add(NoticeField(
+                          i - 1,
+                          Notice(
+                            description: notices[i][0],
+                            type: notices[i][1],
+                            tags: parseArray(notices[i][2]),
+                          )));
+                    }
+                  } else if (type == "xlsx") {
+                    final excel = Excel.decodeBytes(
+                        await saveStorage.readFileAsBytes(selectedFile.value!));
+
+                    List<String> parseArray(String csv) {
+                      return csv
+                          .substring(1, csv.length - 1)
+                          .replaceAll(" ", "")
+                          .split(",");
+                    }
+
+                    final sheet = excel.sheets.values.first;
+
+                    for (final row in sheet.rows..removeAt(0)) {
+                      state.add(NoticeField(
+                          state.length,
+                          Notice(
+                            description: row[0]!.value,
+                            type: row[1]!.value,
+                            tags: parseArray(row[2]!.value),
+                          )));
+                    }
+                  }
 
                   onImport(state);
 

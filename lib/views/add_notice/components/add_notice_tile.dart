@@ -144,6 +144,7 @@ Widget addNoticeTile(
                       .where((filter) => filter != lawLabel)
                       .toList();
                 }
+                updateFields();
               }),
         ],
       ),

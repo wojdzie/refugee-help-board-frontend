@@ -47,6 +47,8 @@ Widget exportNoticesDialog(BuildContext context,
               var json =
                   jsonEncode(notices.map((notice) => notice.toJson()).toList());
 
+              print(notices);
+
               await saveStorage.writeFile(filenameController.text, json,
                   exportOptions[exportType.value]);
             } else if (exportOptions[exportType.value] == "csv") {
@@ -93,7 +95,7 @@ Widget exportNoticesDialog(BuildContext context,
                     .value = notices[i].tags;
               }
 
-              final xslx = excel.save()!;
+              final xslx = excel.encode()!;
 
               await saveStorage.writeFileAsBytes(filenameController.text, xslx,
                   exportOptions[exportType.value]);

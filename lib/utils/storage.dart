@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,5 +56,11 @@ class Storage {
     final directory = await localDirectory;
 
     return await File(join(directory.path, filename)).readAsString();
+  }
+
+  Future<Uint8List> readFileAsBytes(String filename) async {
+    final directory = await localDirectory;
+
+    return await File(join(directory.path, filename)).readAsBytes();
   }
 }
